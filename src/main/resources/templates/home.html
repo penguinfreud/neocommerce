@@ -2,15 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org" class="rwd">
 <head>
     <meta charset="UTF-8" />
-    <!--<meta http-equiv="refresh" content="0; url=3Dtest.html">-->
+    <!--<meta http-equiv="refresh" content="0; url=product-detail.html">-->
     <title>Welcome to NeoCommerce</title>
+    <link rel="stylesheet" href="../css/global.component.css">
     <link rel="stylesheet" href="../css/home.css">
 </head>
 <body>
-<!--<iframe scr="./templates/3Dtest.html"></iframe>-->
+<!--<iframe scr="./templates/product-detail.html"></iframe>-->
 <div class="container global-container">
     <header role="banner">
-    <nav class="global-menu navbar-fixed-top " role="navigation" data-igm>
+ <nav class="global-menu navbar-fixed-top " role="navigation" data-igm>
         <div class="container main-navbar">
             <!--::before-->
             <div class="row">
@@ -38,18 +39,43 @@
                                 <!--<span class="login-icon"></span>-->
                                 </button>
                             </li>
+                            <li>
+                                <button class="logup logup-toggle">
+                                    <span class="logup-label">Logup</span>
+                                </button>
+                            </li>
+                            <li>
+                                <button class="provider ">
+                                    <span class="provider-label">Provider</span>
+                                </button>
+                            </li>
+                            <li>
+                                <button class="service ">
+                                    <span class="service-label">Service</span>
+                                </button>
+                            </li>
                         </ul>
 
                     </div>
                 </div>
             </div>
         </div>
-    </nav>
+ </nav>
     </header>
     <div class="page">
+         <div class="search-bar">
+                <div class="search-left">
+                    <span>Search</span>
+                    <i></i>
+                </div>
+                <input type="text" placeholder="search hit products" id="searchid">
+                <div class="search-btn">
+                    <i></i>
+                </div>
+        </div>
     <section class="chat-box on-line ">
         <div class="section-title title">
-            People Online
+            Customers Online
         </div>
         <ul class="userlist" id="userlist">
             <li id="list-1">
@@ -64,12 +90,26 @@
         </ul>
     </section>
     <section class="demonstration main-content">
+
         <div class="section-title title ">
-            Our Product </div>
-        <div class="container product-show">
-            <a href="3Dtest.html" >
-                <img src="../model/Hetzer_2/large_thumbnail.jpg">
-            </a>
+            Newest Product </div>
+        <div class="container product-show" id="newest">
+            <div class="bn-item">
+                <div class="item" style="display: none">
+                    <a href="product-detail.html" >
+                        <img src="../model/Hetzer_2/large_thumbnail.jpg">
+                    </a>
+                </div>
+                <div class="item" >
+                    <a href="product-detail.html" >
+                        <img src="../model/Mercedes-Benz-G500/large_thumbnail.jpg">
+                    </a>
+                </div>
+            </div>
+            <div class="bn-btn">
+                <span class="btn" data-i="0">&nbsp;</span>
+                <span class="btn" data-i="1">&nbsp;</span>
+            </div>
         </div>
     </section>
     </div>
@@ -85,7 +125,6 @@
                 </ul>
             </div>
         </div>
-
     </footer>
 </div>
 </body>

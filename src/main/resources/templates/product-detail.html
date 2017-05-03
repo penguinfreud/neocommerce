@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" class="rwd">
+<head>
+    <meta charset="UTF-8">
+    <title>Hetzer 2 customization</title>
+    <style>
+        body { margin: 0; }
+        canvas { margin: 3px; }
+    </style>
+    <link rel="stylesheet" href="../css/global.component.css">
+    <link rel="stylesheet" href="../css/product-detail.css">
+</head>
+<body>
+<div class="container global-container">
+    <header role="banner">
+ <nav class="global-menu navbar-fixed-top " role="navigation" data-igm>
+        <div class="container main-navbar">
+            <!--::before-->
+            <div class="row">
+                <!--::before-->
+                <div class="nav-left ">
+                    <div class="content">
+                        <ul>
+                            <li>
+                                <button>Products</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="nav-center ">
+                    <div class="content">
+                        <div class="brand">NEOCOMMERCE</div>
+                    </div>
+                </div>
+                <div class="nav-right ">
+                    <div class="content">
+                        <ul>
+                            <li>
+                                <button class="login login-toggle">
+                                <span class="login-label">Login</span>
+                                <!--<span class="login-icon"></span>-->
+                                </button>
+                            </li>
+                            <li>
+                                <button class="logup logup-toggle">
+                                    <span class="logup-label">Logup</span>
+                                </button>
+                            </li>
+                            <li>
+                                <button class="provider ">
+                                    <span class="provider-label">Provider</span>
+                                </button>
+                            </li>
+                            <li>
+                                <button class="service ">
+                                    <span class="service-label">Service</span>
+                                </button>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+ </nav>
+    </header>
+    <div class="page">
+        <div id="metadata-panel" class="metadata-panel">
+            <div class="metadata-top">
+                <span>Parameter Adjustment</span>
+            </div>
+            <div class="metadata-center">
+                <div class="color-customize">
+                    <h2 class="label">
+                        Color
+                    </h2>
+                    <div class="detail">
+                        <div class="detail-item"><div class="detail-left"><h3>车前盖</h3></div>
+                            <div class="detail-right">
+                            <select>
+                                <option value="yellow">黄</option>
+                                <option value="white">白</option>
+                                <option value="black">黑</option>
+                                <option value="red">红</option>
+                            </select>
+                            </div>
+                        </div>
+                        <div class="detail-item"><div class="detail-left"><h3>车门</h3></div>
+                            <div class="detail-right">
+                            <select>
+                                <option value="yellow">黄</option>
+                                <option value="white">白</option>
+                                <option value="black">黑</option>
+                                <option value="red">红</option>
+                            </select>
+                            </div>
+                        </div>
+                        <div class="detail-item"><div class="detail-left"><h3>车身</h3></div>
+                            <div class="detail-right">
+                            <select>
+                                <option value="yellow">黄</option>
+                                <option value="white">白</option>
+                                <option value="black">黑</option>
+                                <option value="red">红</option>
+                            </select>
+                            </div>
+                        </div>
+                        <div class="detail-item"><div class="detail-left"><h3>反光镜</h3></div>
+                            <div class="detail-right">
+                            <select>
+                                <option value="yellow">黄</option>
+                                <option value="white">白</option>
+                                <option value="black">黑</option>
+                                <option value="red">红</option>
+                            </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="main-content" id="main-content">
+            <div class="model-title">
+                <span>Model Name Here</span>
+            </div>
+            <div class="container" id="canvas_container"></div>
+            <div class="model-description">
+                The Mercedes-Benz G-Class or G-Wagen, short for Geländewagen (or cross-country vehicle), is a four-wheel drive vehicle / sport utility vehicle (SUV) produced by German automaker Mercedes-Benz. It was borne by proposals for a military vehicle in the early 1970s by the Shah Mohammad Reza Pahlavi of Iran, a major Daimler-Benz shareholder. Developed in co-operation with the Austrian car manufacturer Steyr-Daimler-Puch, production of the G-Class began in 1979 with the 460 Series models. The G-Class has been sold under the Puch name in certain markets, and the Peugeot P4 is a variant made under license, with a Peugeot engine and other equipment. The chassis was revised for 1990 as the W463 with anti-lock brakes, full-time 4WD and a full trio of electronically-locking differentials. The interior was totally upgraded, finished with wooden accents and optional leather upholstery.
+            </div>
+        </div>
+    </div>
+    <footer class="global">
+        <div class="container footer">
+            <div class="row">
+                <ul>
+                    <li>© Neocommerce</li>
+                    <li>Tel: ***</li>
+                    <li>Addr: ***</li>
+                    <li>PostCode: ***</li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/lib/three.js"></script>
+    <script src="../js/lib/ColladaLoader.js"></script>
+    <script src="../js/lib/OrbitControls.js"></script>
+    <script src="../js/lib/stats.min.js"></script>
+    <script src="../js/product-detail.js"></script>
+</div>
+</body>
+</html>

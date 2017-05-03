@@ -1,0 +1,76 @@
+html, body, .global-container{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.rwd body{
+    background-color: white;
+    -webkit-font-smoothing: antialiased;
+}
+header{
+    width: 100%;
+    height: 60px;
+    background: #0071c5;
+}
+.rwd .main-navbar .row {
+    /*margin-left: -15px;*/
+    /*margin-right: -15px;*/
+    box-sizing:border-box;
+    color: #f3f3f3;
+    font-size: 16px;
+    line-height: 1.428;
+}
+.rwd .nav-left, .rwd .nav-center, .rwd .nav-right {
+    float: left;
+    position: relative;
+    height: 60px;
+}
+.rwd .main-navbar button {
+    background: transparent;
+    padding: 0;
+    border: 0;
+    color: #f3f3f3;
+    min-height: 1px;
+}
+.nav-left {
+    width: 40.67%;
+}
+.nav-center {
+    width: 14.67%;
+    text-align: center;
+}
+.nav-right {
+    width: 40.67%;
+    text-align: right;
+}
+.rwd .brand {
+    height: 50%;
+    margin-top: 10%;
+}
+.row li{
+    list-style-type: none;
+    display: inline-block;
+    padding-left: 10px;
+}
+
+.page {
+    padding-buttom: 60px;
+    margin: 0;
+    width: 100%;
+}
+
+footer {
+    width: 100%;
+    height: 60px;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+}
+footer ul {
+    box-sizing: border-box;
+}
+footer li{
+    float: none;
+    width: auto;
+    margin-right: 1em;
+}
