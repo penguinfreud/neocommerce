@@ -7,8 +7,29 @@ var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
 var VIEW_ANGLE = 45, ASPECT = 1, NEAR = 0.3, FAR = 1000;
 var camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
 // tune x: horizontal y: vertical z: distance
-camera.position.set(-25, 20 , -50);
-camera.lookAt(new THREE.Vector3(0, 0, 0));
+// camera.position.set(-25, 20 , -50);
+var selection = 2;
+var CAM_POS = [
+    [-25, 20, -50],
+    [-55, 65, 0],
+    [-10, 40, 50],
+];
+var CAM_LOOKAT = [
+    [0, 0, 0],
+    [-30, 50, -10],
+    [10, 20, 10],
+];
+var MODEL_POS = [
+    [20, -20, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+];
+var MODEL_SCALE = [
+    0.3, 0.15, 0.1,
+];
+var MODELS = ["Mercedes-Benz-G500", "mystik_dsrv_CC50", "Hetzer_2"];
+camera.position.set(CAM_POS[selection][0], CAM_POS[selection][1], CAM_POS[selection][2]);
+camera.lookAt(new THREE.Vector3(CAM_LOOKAT[selection][0], CAM_LOOKAT[selection][1], CAM_LOOKAT[selection][2]));
 scene.add(camera);
 
 var renderer = new THREE.WebGLRenderer({antialias: true});
@@ -29,30 +50,33 @@ function init() {
     var skyBoxGeometry = new THREE.BoxGeometry(500, 400, 500);
     var skyBoxMaterial = new THREE.MeshBasicMaterial({
         color: 0x9999ff,
-//            color: 0xffffff,
         side: THREE.BackSide
     });
     var skyBox = new THREE.Mesh(skyBoxGeometry, skyBoxMaterial);
     scene.add(skyBox);
-
-//        container = document.getElementById( 'container' );
-//        camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
-//        camera.position.set( 7, 5, 7 );
-//        scene = new THREE.Scene();
+    var ambient = new THREE.AmbientLight( 0xffffff);
+    scene.add(ambient);
+    var directionalLight = new THREE.DirectionalLight( 0xffffff);
+    directionalLight.position.set( -5, 5, 5).normalize();
+    scene.add(directionalLight);
+    var pointLight = new THREE.PointLight(0x63d5ff, 1, 200);
+    pointLight.position.set(0, 0, 200);
+    scene.add( pointLight );
 
     if (SWITCH_LOAD) {
         var loader = new THREE.ColladaLoader();
         loader.options.convertUpAxis = true;
-        // loader.load('../model/Hetzer_2/model.dae', function (collada) {
-        loader.load('../model/Mercedes-Benz-G500/model.dae', function (collada) {
+        var model_path='../model/' + MODELS[selection] + '/model.dae';
+        loader.load(model_path, function (collada) {
             var object = collada.scene;
-            object.scale.set( 0.3, 0.4, 0.3 );
-            object.position.set( 20, -20, 0 );
+            var SCALE = MODEL_SCALE[selection];
+            // object.scale.set( 0.3, 0.4, 0.3 );
+            object.scale.set( SCALE , SCALE , SCALE);
+            object.position.set(MODEL_POS[selection][0], MODEL_POS[selection][1], MODEL_POS[selection][2] );
             scene.add( object );
         });
     }
 }
-
 
 //        var gridHelper = new THREE.GridHelper( 10, 20 );
 //        scene.add( gridHelper );

@@ -54,6 +54,7 @@ section.demonstration {
 }
 .rwd .search-bar {
     margin-left: 30%;
+    margin-right: 30%;
     height: 34px;
     line-height: 34px;
     width: 508px;
