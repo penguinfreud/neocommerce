@@ -8,7 +8,7 @@ var VIEW_ANGLE = 45, ASPECT = 1, NEAR = 0.3, FAR = 1000;
 var camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
 // tune x: horizontal y: vertical z: distance
 // camera.position.set(-25, 20 , -50);
-var selection = 2;
+var selection = 0;
 var CAM_POS = [
     [-25, 20, -50],
     [-55, 65, 0],
