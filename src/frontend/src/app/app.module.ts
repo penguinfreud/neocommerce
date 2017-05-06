@@ -1,5 +1,6 @@
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 
 import { AppComponent }  from './app.component';
 import { NavBarComponent } from './nav-bar.component'
@@ -9,14 +10,35 @@ import { ProductListComponent } from './product/product-list.component';
 import { UserBarComponent } from './user/user-bar.component';
 import { LoginComponent } from './user/login.component';
 import { SignupComponent } from './user/signup.component';
+import { AlertComponent } from './util/alert.component';
 
 import { AppRoutingModule } from './app-routing.module';
+import { AlertService } from './util/alert.service';
+import { UserService } from './user/user.service';
+import { AuthGuard } from './user/auth.guard';
+
+import { fakeBackendProvider } from './util/fake-backend';
+import { MockBackend, MockConnection } from '@angular/http/testing';
+import { BaseRequestOptions } from '@angular/http';
 
 @NgModule({
-    imports:      [ BrowserModule, AppRoutingModule ],
-    declarations: [ AppComponent, NavBarComponent, FooterComponent, ChatBoxComponent, ProductListComponent,
-        UserBarComponent, LoginComponent, SignupComponent ],
-    bootstrap:    [ AppComponent, NavBarComponent, FooterComponent ],
-    providers: [ ]
+    imports:      [ BrowserModule, AppRoutingModule, FormsModule ],
+    declarations: [
+        AppComponent,
+        NavBarComponent,
+        FooterComponent,
+        ChatBoxComponent,
+        ProductListComponent,
+        UserBarComponent,
+        LoginComponent,
+        SignupComponent,
+        AlertComponent
+    ],
+    bootstrap:    [ AppComponent ],
+    providers: [
+        AlertService, UserService, AuthGuard,
+        fakeBackendProvider,
+        MockBackend, BaseRequestOptions
+     ]
 })
 export class AppModule { }
