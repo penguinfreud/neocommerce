@@ -11,13 +11,12 @@ import { LoginComponent } from './user/login.component';
 import { SignupComponent } from './user/signup.component';
 
 import { AppRoutingModule } from './app-routing.module';
-import { CurrentUserService } from './user/current-user.service';
 
 @NgModule({
     imports:      [ BrowserModule, AppRoutingModule ],
     declarations: [ AppComponent, NavBarComponent, FooterComponent, ChatBoxComponent, ProductListComponent,
         UserBarComponent, LoginComponent, SignupComponent ],
     bootstrap:    [ AppComponent, NavBarComponent, FooterComponent ],
-    providers: [ CurrentUserService ]
+    providers: [ ]
 })
 export class AppModule { }
