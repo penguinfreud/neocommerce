@@ -18,4 +18,5 @@ hs_err_pid*
 
 *.js.map
 node_modules/
-/src/frontend/src/**/*.js
+/src/frontend/src/app/**/*.js
+/src/frontend/src/app/main.js
