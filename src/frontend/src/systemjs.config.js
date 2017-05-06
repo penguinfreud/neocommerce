@@ -3,7 +3,7 @@
  * Adjust as necessary for your application needs.
  */
 (function (global) {
-  let ngPkg = {
+  var ngPkg = {
     defaultExtension: 'js',
     meta: {
       './*.js': {
