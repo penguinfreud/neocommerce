@@ -11,11 +11,14 @@ import { UserBarComponent } from './user/user-bar.component';
 import { LoginComponent } from './user/login.component';
 import { SignupComponent } from './user/signup.component';
 import { AlertComponent } from './util/alert.component';
+import { ProductDetailComponent } from './product/product-detail.component';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AlertService } from './util/alert.service';
-import { UserService } from './user/user.service';
 import { AuthGuard } from './user/auth.guard';
+import { UserService } from './user/user.service';
+import { ProductService } from './product/product.service';
+
 
 import { fakeBackendProvider } from './util/fake-backend';
 import { MockBackend, MockConnection } from '@angular/http/testing';
@@ -32,11 +35,15 @@ import { BaseRequestOptions } from '@angular/http';
         UserBarComponent,
         LoginComponent,
         SignupComponent,
-        AlertComponent
+        AlertComponent,
+        ProductDetailComponent
     ],
-    bootstrap:    [ AppComponent ],
+    bootstrap: [ AppComponent ],
     providers: [
-        AlertService, UserService, AuthGuard,
+        AlertService, AuthGuard,
+        UserService,
+        ProductService,
+        
         fakeBackendProvider,
         MockBackend, BaseRequestOptions
      ]

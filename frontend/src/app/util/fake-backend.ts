@@ -1,12 +1,15 @@
 import { Http, BaseRequestOptions, Response, ResponseOptions, RequestMethod } from '@angular/http';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 
+import { UserType } from '../user/user';
+
 export let fakeBackendProvider = {
     // use fake backend in place of Http service for backend-less development
     provide: Http,
     useFactory: (backend: MockBackend, options: BaseRequestOptions) => {
         // array in local storage for registered users
         let users: any[] = JSON.parse(localStorage.getItem('users')) || [];
+        let products: any[] = JSON.parse(localStorage.getItem('products')) || [ { id: 1, name: 'product foo', price: 99, description: 'product description' } ];
 
         // configure fake backend
         backend.connections.subscribe((connection: MockConnection) => {
@@ -83,6 +86,7 @@ export let fakeBackendProvider = {
 
                     // save new user
                     newUser.id = users.length + 1;
+                    newUser.type = UserType.CUSTOMER;
                     users.push(newUser);
                     localStorage.setItem('users', JSON.stringify(users));
 
@@ -113,6 +117,26 @@ export let fakeBackendProvider = {
                         // return 401 not authorised if token is null or invalid
                         connection.mockRespond(new Response(new ResponseOptions({ status: 401 })));
                     }
+                }
+                
+                if (connection.request.url.endsWith('/api/products') && connection.request.method === RequestMethod.Get) {
+                    connection.mockRespond(new Response(new ResponseOptions({ status: 200, body: products })));
+                }
+                
+                let m = connection.request.url.match(/\/api\/products\/(\d+)$/);
+                if (m && connection.request.method == RequestMethod.Get) {
+                    let id = parseInt(m[1]);
+                    let matchedProducts = products.filter(prod => prod.id === id);
+                    let product = matchedProducts.length > 0? matchedProducts[0]: null;
+                    connection.mockRespond(new Response(new ResponseOptions({ status: 200, body: product })));
+                }
+                
+                if (connection.request.url.endsWith('/api/products') && connection.request.method === RequestMethod.Post) {
+                    let newProduct = JSON.parse(connection.request.getBody());
+                    newProduct.id = products.length + 1;
+                    products.push(newProduct);
+                    localStorage.setItem('products', JSON.stringify(products));
+                    connection.mockRespond(new Response(new ResponseOptions({ status: 200 })));
                 }
 
             }, 500);

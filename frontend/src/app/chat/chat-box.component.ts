@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { User } from '../user/user';
+import { User, UserType } from '../user/user';
 import { UserService } from '../user/user.service';
 
 @Component({
@@ -9,10 +9,12 @@ import { UserService } from '../user/user.service';
 })
 export class ChatBoxComponent implements OnInit {
     currentUser: User
+    users: User[]
 
     constructor(private userService: UserService) {}
 
     ngOnInit() {
         this.userService.getCurrent().subscribe(user => this.currentUser = user);
+        this.userService.getAll().subscribe(users => this.users = users);
     }
 }

@@ -1,16 +1,10 @@
 <div *ngIf="currentUser">
-    <div class="section-title title">
+    <div>
         Customers Online
     </div>
-    <ul class="userlist" id="userlist">
-        <li id="list-1">
-            <button>Neo</button>
-        </li>
-        <li id="list-2">
-            <button>Penguinfreud</button>
-        </li>
-        <li id="list-3">
-            <button>WXY</button>
+    <ul *ngFor="let user of users">
+        <li *ngIf="user.type === UserType.CUSTOMER">
+            <button>{{user.name}}}</button>
         </li>
     </ul>
 </div>

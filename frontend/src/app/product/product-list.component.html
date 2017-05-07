@@ -1,1 +1,9 @@
-<div></div>
+<div *ngFor="let product of products">
+    <div>
+        <a routerLink="/products/{{product.id}}">
+            <span>{{product.name}}</span>
+        </a>
+        <p>{{product.price}}</p>
+        <p>{{product.description}}</p>
+    </div>
+</div>
