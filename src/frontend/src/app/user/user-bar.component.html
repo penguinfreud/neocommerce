@@ -1,0 +1,8 @@
+<div *ngIf="currentUser">
+    Welcome {{currentUser.name}}
+    <a (click)="logout()" href="#">Log out</a>
+</div>
+<div *ngIf="!currentUser">
+    <a routerLink="/login">Log in</a>
+    <a routerLink="/signup">Sign up</a>
+</div>

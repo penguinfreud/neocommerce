@@ -14,3 +14,10 @@ hs_err_pid*
 .gradle/
 .idea/
 /build/
+.vscode/
+
+*.js.map
+node_modules/
+/src/frontend/src/app/**/*.js
+main.js
+
