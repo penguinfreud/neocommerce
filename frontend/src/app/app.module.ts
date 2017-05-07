@@ -19,7 +19,6 @@ import { AuthGuard } from './user/auth.guard';
 import { UserService } from './user/user.service';
 import { ProductService } from './product/product.service';
 
-
 import { fakeBackendProvider } from './util/fake-backend';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 import { BaseRequestOptions } from '@angular/http';

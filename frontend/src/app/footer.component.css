@@ -1,0 +1,20 @@
+.footer {
+    width: 100%;
+    height: 60px;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+}
+.footer ul {
+    box-sizing: border-box;
+}
+.footer li{
+    float: none;
+    width: auto;
+    margin-right: 1em;
+}
+.row li{
+    list-style-type: none;
+    display: inline-block;
+    padding-left: 10px;
+}
