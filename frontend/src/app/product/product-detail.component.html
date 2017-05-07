@@ -1,6 +1,123 @@
-<div>
-<p>{{product?.name}}</p>
-<p>{{product?.price}}</p>
-<p>{{product?.description}}</p>
-<a (click)="addToCart()" routerLink="#">Add to cart</a>
+<!--<div>-->
+<!--<p>{{product?.name}}</p>-->
+<!--<p>{{product?.price}}</p>-->
+<!--<p>{{product?.description}}</p>-->
+<!--<a (click)="addToCart()" routerLink="#">Add to cart</a>-->
+</div>
+<div class="detail-container" *ngIf="product">
+    <div id="metadata-panel" class="metadata-panel">
+        <div class="metadata-top">
+            <span>Parameter Adjustment</span>
+        </div>
+        <div class="metadata-center">
+            <div class="color-customize">
+                <h2 class="label">Color Customize</h2>
+                <div class="detail">
+                    <div class="detail-item"><div class="detail-left"><h3>车前盖</h3></div>
+                        <div class="detail-right">
+                            <select>
+                                <option value="yellow">黄</option>
+                                <option value="white">白</option>
+                                <option value="black">黑</option>
+                                <option value="red">红</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="detail-item"><div class="detail-left"><h3>车门</h3></div>
+                        <div class="detail-right">
+                            <select>
+                                <option value="yellow">黄</option>
+                                <option value="white">白</option>
+                                <option value="black">黑</option>
+                                <option value="red">红</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="detail-item"><div class="detail-left"><h3>车身</h3></div>
+                        <div class="detail-right">
+                            <select>
+                                <option value="yellow">黄</option>
+                                <option value="white">白</option>
+                                <option value="black">黑</option>
+                                <option value="red">红</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="detail-item"><div class="detail-left"><h3>反光镜</h3></div>
+                        <div class="detail-right">
+                            <select>
+                                <option value="yellow">黄</option>
+                                <option value="white">白</option>
+                                <option value="black">黑</option>
+                                <option value="red">红</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="performance-bar">
+                <h2 class="label">Performance Parameters</h2>
+                <div class="detail">
+                    <div class="detail detail-item">
+                        <div class="detail-left"><h3>尺寸</h3></div>
+                        <div class="detail-right"><span>5065/1860/1467 mm</span></div>
+                    </div>
+                    <div class="detail detail-item">
+                        <div class="detail-left"><h3>轴距</h3></div>
+                        <div class="detail-right"><span>3079 mm</span></div>
+                    </div>
+                    <div class="detail detail-item">
+                        <div class="detail-left"><h3>型号</h3></div>
+                        <div class="detail-right"><span>G500</span></div>
+                    </div>
+                    <div class="detail detail-item">
+                        <div class="detail-left"><h3>额定功率</h3></div>
+                        <div class="detail-right"><span>135/184/5500</span></div>
+                    </div>
+                    <div class="detail detail-item">
+                        <div class="detail-left"><h3>额定扭矩</h3></div>
+                        <div class="detail-right"><span></span>300/1200-4000</div>
+                    </div>
+                    <div class="detail detail-item">
+                        <div class="detail-left"><h3>气缸数/总排量</h3></div>
+                        <div class="detail-right"><span></span>L4/1991</div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="price-bar">
+                <div class="detail">
+                    <div class="detail-item">
+                        <div class="detail-left">
+                            <h3 class="price-label label">价格</h3>
+                        </div>
+                        <div class="detail-right">
+                            <span class="price value">¥ {{product.price}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="metadata-bottom">
+            <div class="btn-area">
+                <span class="btn-add-into-trolley" (click)="addToCart()">加入购物车</span>
+                <span class="btn-submit" (click)="balance()">立即购买</span>
+            </div>
+        </div>
+    </div>
+    <div class="main-content" id="main-content">
+        <div class="model-title">
+            <span id="product-name">{{product.name}}</span>
+            <script>
+                console.log("Executing here.");
+            </script>
+        </div>
+        <div class="container" id="canvas_container">
+            <img onload="threedshow()" src="model/Hetzer_2/large_thumbnail.jpg" style="display: none;">
+        </div>
+        <div class="model-description">
+            {{product.desc}}
+        </div>
+    </div>
 </div>

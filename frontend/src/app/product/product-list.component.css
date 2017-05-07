@@ -1,0 +1,124 @@
+/*serch bar*/
+.search-bar {
+    margin-left: 30%;
+    margin-right: 30%;
+    height: 34px;
+    line-height: 34px;
+    width: 508px;
+    border: 1px solid #000;
+    position: relative;
+    box-sizing: content-box;
+    float: left;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+.search-bar .search-left {
+    width: 90px;
+    cursor: pointer;
+    text-align: center;
+    float: left;
+}
+.search-bar input {
+    outline: 0;
+    resize: vertical;
+    width: 334px;
+    color: rgb(68,68,68);
+    background-color: rgb(255,255,255);
+    border: none;
+    vertical-align: middle;
+}
+.search-bar .search-btn {
+    width: 70px;
+    cursor: pointer;
+    float: right;
+    text-align: center;
+    background: #000;
+}
+.search-left i {
+    color: #b7b7b7;
+    margin-left: 6px;
+    background-position: 0 -90px;
+    width: 14px;
+    height: 14px;
+    background: url(../../assets/img/icon.png) no-repeat;
+    display: inline-block;
+    margin-top: -3px;
+}
+.search-btn i {
+    background: url(../../assets/img/icon.png) no-repeat;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    margin-top: -3px;
+    vertical-align: middle;
+    background-position: 0 -60px;
+}
+
+/*product list*/
+.detail-container {
+    padding: 0;
+    margin: 0;
+}
+.product-item {
+    width: 210px;
+    padding: 14px;
+    border: 1px solid #eee;
+    float: left;
+    margin-left: -1px;
+    margin-right: 20px;
+    line-height: 30px;
+    margin-top: 15px;
+    position: relative;
+}
+.product-item .img {
+    display: block;
+    text-align: center;
+    width: 210px;
+    height: 170px;
+}
+.product-item img {
+    width: 170px;
+    height: 170px;
+    border: none;
+    vertical-align: middle;
+}
+.product-item .line {
+    position: relative;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: #eee;
+}
+.ing {
+    position: absolute;
+    height: 6px;
+    border-radius: 3px;
+    background: #ccc;
+    left: 0;
+    top: 0;
+}
+.row {
+    font-size: 16px;
+}
+.info {
+    color: #aaa;
+}
+.fl, .fr {
+    display: inline;
+}
+.f1 {
+    float: left;
+}
+.fr {
+    float: right;
+}
+.info .fl {
+    color: #fc5454;
+}
+.shop {
+    color: #888;
+    text-decoration: underline;
+}
+.location {
+    color: #888;
+}

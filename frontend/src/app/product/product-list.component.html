@@ -1,9 +1,46 @@
-<div *ngFor="let product of products">
-    <div>
-        <a routerLink="/products/{{product.id}}">
-            <span>{{product.name}}</span>
+<!--<div *ngFor="let product of products">-->
+    <!--<div>-->
+        <!--<a routerLink="/products/{{product.id}}">-->
+            <!--<span>{{product.name}}</span>-->
+        <!--</a>-->
+        <!--<p>{{product.price}}</p>-->
+        <!--<p>{{product.description}}</p>-->
+    <!--</div>-->
+<!--</div>-->
+<div class="search-bar">
+    <div class="search-left">
+        <span>Search</span>
+        <i></i>
+    </div>
+    <input type="text" placeholder="search hit products" id="searchid">
+    <div class="search-btn">
+        <i></i>
+    </div>
+</div>
+<div class="detail-container" *ngIf="products">
+    <div class="product-item" *ngFor="let product of products" (click)="gotoDetail(product)">
+        <a class="img">
+            <img src="model/{{product.name}}/large_thumbnail.jpg" id="{{product.id}}">
         </a>
-        <p>{{product.price}}</p>
-        <p>{{product.description}}</p>
+        <p class="product-name">{{product.name | uppercase}}</p>
+        <div class="line">
+            <div class="ing" style="width: 100%"></div>
+        </div>
+        <div class="row info">
+            <div class="fl">
+                ￥{{product.price}}
+            </div>
+            <div class="fr">
+                {{product.buyers}} Payed
+            </div>
+        </div>
+        <div class="row">
+            <div class="fl shop">
+                {{product.provider}}
+            </div>
+            <div class="fr location">
+                {{product.factory}}
+            </div>
+        </div>
     </div>
 </div>
