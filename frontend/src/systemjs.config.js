@@ -40,9 +40,6 @@
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {
       app: ngPkg,
-      chat: ngPkg,
-      product: ngPkg,
-      user: ngPkg,
       rxjs: {
         defaultExtension: 'js'
       }
