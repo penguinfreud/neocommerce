@@ -7,6 +7,7 @@ import { UserService } from './user.service';
 @Component({
     selector: 'signup',
     templateUrl: './signup.component.html'
+    styleUrls: ['./signup.component.css']
 })
 
 export class SignupComponent {
