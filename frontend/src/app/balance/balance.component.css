@@ -114,6 +114,7 @@
 }
 .cart-checkbox label {
     display: none;
+    border: none;
 }
 .order-content .name .item-pic {
     width: 80px;
@@ -167,6 +168,7 @@
     font-size: 18px;
     background: #e54346;
     overflow: hidden;
+    cursor: pointer;
 }
 .balance-bar .total {
     height: 43px;
@@ -186,4 +188,5 @@
     padding-top: 5px;
 }
 .operations .rm-selected {
+    cursor: pointer;
 }
