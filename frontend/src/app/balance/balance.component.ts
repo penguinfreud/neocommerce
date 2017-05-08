@@ -5,22 +5,26 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Product } from '../product/product';
+import { AccountService } from './account.service';
 
 @Component({
-    selector: 'product-list',
-    templateUrl: './product-list.component.html',
-    styleUrls: ['./product-list.component.css']
+    selector: 'balance',
+    templateUrl: './balance.component.html',
+    styleUrls: ['./balance.component.css']
 })
 export class BalanceComponent implements OnInit {
     products: Product[];
+    total: number;
 
-    constructor( private router: Router) {}
+    constructor(
+        // private router: Router,
+        private acountService: AccountService
+    ) {}
 
     ngOnInit() {
-
+        this.products = this.acountService.getCart();
+        this.total = this.acountService.total;
+        console.log(this.products);
     }
 
-    gotoDetail(product: Product): void {
-        this.router.navigate(['/detail', product.id]);
-    }
 }

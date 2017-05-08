@@ -3,7 +3,8 @@
 <!--<p>{{product?.price}}</p>-->
 <!--<p>{{product?.description}}</p>-->
 <!--<a (click)="addToCart()" routerLink="#">Add to cart</a>-->
-</div>
+<!--</div>-->
+
 <div class="detail-container" *ngIf="product">
     <div id="metadata-panel" class="metadata-panel">
         <div class="metadata-top">
@@ -101,17 +102,14 @@
         </div>
         <div class="metadata-bottom">
             <div class="btn-area">
-                <span class="btn-add-into-trolley" (click)="addToCart()">加入购物车</span>
-                <span class="btn-submit" (click)="balance()">立即购买</span>
+                <span class="btn-add-into-trolley" *ngIf="product" (click)="addToCart()">加入购物车</span>
+                <span class="btn-submit" *ngIf="product" (click)="balance()">立即购买</span>
             </div>
         </div>
     </div>
     <div class="main-content" id="main-content">
         <div class="model-title">
             <span id="product-name">{{product.name}}</span>
-            <script>
-                console.log("Executing here.");
-            </script>
         </div>
         <div class="container" id="canvas_container">
             <img onload="threedshow()" src="model/Hetzer_2/large_thumbnail.jpg" style="display: none;">

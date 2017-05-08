@@ -37,13 +37,15 @@ import { BaseRequestOptions } from '@angular/http';
         LoginComponent,
         SignupComponent,
         AlertComponent,
-        ProductDetailComponent
+        ProductDetailComponent,
+        BalanceComponent,
     ],
     bootstrap: [ AppComponent ],
     providers: [
         AlertService, AuthGuard,
         UserService,
         ProductService,
+        AccountService,
         
         fakeBackendProvider,
         MockBackend, BaseRequestOptions

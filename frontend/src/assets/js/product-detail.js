@@ -29,9 +29,13 @@ var MODELS = ["Mercedes-Benz-G500", "mystik_dsrv_CC50", "Hetzer_2"];
 
 function threedshow()
 {
+    while (scene.children.length > 0) {
+        scene.remove(scene.children[0]);
+    }
+    console.log("empty the 3D scene.");
     container = document.getElementById("canvas_container");
     var product_name = document.getElementById('product-name').innerText;
-    console.log(product_name);
+    // console.log(product_name);
     var selection = 0;
     var i = -1;
     for (; i < MODELS.length; i++) {
@@ -54,7 +58,7 @@ function threedshow()
     var renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setSize(654, 368);
 //        document.body.appendChild(renderer.domElement);
-    console.log(container);
+//     console.log(container);
     container.appendChild(renderer.domElement);
 
     function render() {

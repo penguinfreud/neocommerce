@@ -2,7 +2,6 @@ import 'rxjs/add/operator/switchMap';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
-
 import { Product } from './product';
 import { ProductService } from './product.service';
 import {AccountService} from "../balance/account.service";
@@ -32,10 +31,12 @@ export class ProductDetailComponent implements OnInit {
     }
     
     addToCart():void {
-        this.accountService.addProduct(this.product);
+        console.log("Add product:");
+        console.log(this.product);
+        this.accountService.addProduct(this.product.id);
     }
 
     balance():void {
-        this.router.navigate("");
+        this.router.navigate(["balance"]);
     }
 }
