@@ -1,7 +1,49 @@
-<div *ngIf="currentUser">
-    <div>
-        Customers Online
+<div *ngIf="currentUser" style="width:600px;">
+    <div style="margin-left:300px">
+        aa
     </div>
+	<form action="action_page.php">
+	<br>
+	<input type="text" style="width:400px;" name="user" value="enter your friend's name">
+	
+	<input type="submit" style="float:right" value="search">
+	<input type="submit" style="float:right" value="launch">
+	</br>
+	</form>
+
+	<div id="Content" style="height:600px;margin-top:20px">
+        <div id="Content-Left" style=" height:400px;width:400px;float:left;
+		 background:#eee;">
+		<div id="Content-Left-Top"style=" height:300px;width:400px;float:left;
+		 background:#ddd;">
+		
+		 <textarea style=" height:290px;width:399px;float:left;
+		 background:#eee;" readonly="readonly">不可写的聊天记录		 
+		 </textarea>
+		 </div>
+		 <div id="Content-Left-Down"style=" height:100px;width:400px;float:left;
+		 background:#eee;">
+		 <form action="action_page.php">
+		 <textarea style=" height:70px;width:399px;float:left;
+		 background:#eee;" >输入聊天内容
+		 </textarea>
+		 <input type="submit" style="float:right;margin-right:5px" value="launch">	
+		 </form>
+		 </div>
+		</div>
+        <div id="Content-Main" style=" height:400px;width:180px;float:left;margin-left:20px;
+		 background:#eee;">
+		 
+		<ul style="list-style:none;float:left">
+    <li><button>用户1</button><br></br></li>
+    <li><button>用户1</button><br></br></li>
+    <li><button>用户1</button><br></br></li>
+    <li><button>用户1</button><br></br></li>
+	</ul>
+		
+		</div>
+	
+	</div>
     <ul *ngFor="let user of users">
         <li *ngIf="user.type === UserType.CUSTOMER">
             <button>{{user.name}}}</button>
