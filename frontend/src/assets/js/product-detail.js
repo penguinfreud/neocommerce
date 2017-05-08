@@ -87,7 +87,7 @@ function threedshow()
         if (SWITCH_LOAD) {
             var loader = new THREE.ColladaLoader();
             loader.options.convertUpAxis = true;
-            var model_path = '../model/' + MODELS[selection] + '/model.dae';
+            var model_path = 'model/' + MODELS[selection] + '/model.dae';
             loader.load(model_path, function (collada) {
                 var object = collada.scene;
                 var SCALE = MODEL_SCALE[selection];
