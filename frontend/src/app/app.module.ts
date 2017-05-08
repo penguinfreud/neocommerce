@@ -12,12 +12,14 @@ import { LoginComponent } from './user/login.component';
 import { SignupComponent } from './user/signup.component';
 import { AlertComponent } from './util/alert.component';
 import { ProductDetailComponent } from './product/product-detail.component';
+import { BalanceComponent } from './balance/balance.component';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AlertService } from './util/alert.service';
 import { AuthGuard } from './user/auth.guard';
 import { UserService } from './user/user.service';
 import { ProductService } from './product/product.service';
+import { AccountService } from './balance/account.service';
 
 import { fakeBackendProvider } from './util/fake-backend';
 import { MockBackend, MockConnection } from '@angular/http/testing';

@@ -1,10 +1,11 @@
 import 'rxjs/add/operator/switchMap';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 
 import { Product } from './product';
 import { ProductService } from './product.service';
+import {AccountService} from "../balance/account.service";
 
 @Component({
     selector: 'product-detail',
@@ -16,7 +17,9 @@ export class ProductDetailComponent implements OnInit {
 
     constructor(
         private productService: ProductService,
-        private route: ActivatedRoute) {
+        private accountService: AccountService,
+        private route: ActivatedRoute,
+        private router: Router) {
     }
 
     ngOnInit():void {
@@ -29,10 +32,10 @@ export class ProductDetailComponent implements OnInit {
     }
     
     addToCart():void {
-
+        this.accountService.addProduct(this.product);
     }
 
     balance():void {
-
+        this.router.navigate("");
     }
 }
