@@ -123,4 +123,3 @@ function threedshow() {
     //        renderer.setSize( window.innerWidth, window.innerHeight);
     //        document.body.appendChild( renderer.domElement );
 }
-//# sourceMappingURL=product-detail.js.map
