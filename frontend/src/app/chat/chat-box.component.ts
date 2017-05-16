@@ -6,11 +6,12 @@ import { UserService } from '../user/user.service';
 @Component({
     selector: 'chat-box',
     templateUrl: './chat-box.component.html',
-    styleUrls: ['./chat-box.component.css']
+    styleUrls: []
 })
 export class ChatBoxComponent implements OnInit {
-    currentUser: User
-    users: User[]
+    currentUser: User;
+    users: User[];
+    CUSTOMER: UserType = UserType.CUSTOMER;
 
     constructor(private userService: UserService) {}
 
