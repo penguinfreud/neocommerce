@@ -5,8 +5,7 @@ import { UserService } from '../user/user.service';
 
 @Component({
     selector: 'chat-box',
-    templateUrl: './chat-box.component.html',
-    styleUrls: []
+    templateUrl: './chat-box.component.html'
 })
 export class ChatBoxComponent implements OnInit {
     currentUser: User;

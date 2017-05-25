@@ -1,5 +1,5 @@
 import 'rxjs/add/operator/switchMap';
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { Product } from './product';
@@ -11,14 +11,14 @@ import {AccountService} from "../balance/account.service";
     templateUrl: './product-detail.component.html',
     styleUrls: ['./product-detail.component.css']
 })
-export class ProductDetailComponent implements OnInit {
+export class ProductDetailComponent implements OnInit, OnDestroy {
     product: Product;
 
     constructor(
         private productService: ProductService,
         private accountService: AccountService,
         private route: ActivatedRoute,
-        private router: Router) {
+        private router: Router,) {
     }
 
     ngOnInit():void {
@@ -28,6 +28,10 @@ export class ProductDetailComponent implements OnInit {
         this.route.params
             .switchMap((params: Params) => this.productService.getProduct(+params['id']))
             .subscribe(product => this.product = product);
+    }
+
+    ngOnDestroy():void {
+        onUnload();
     }
     
     addToCart():void {
