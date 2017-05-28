@@ -3,9 +3,9 @@ export const enum UserType {
 }
 
 export class User {
-    id: number
-    name: string
-    username: string
-    token: string
-    type: UserType
+    id: number;
+    name: string;
+    username: string;
+    token: string;
+    type: UserType;
 }

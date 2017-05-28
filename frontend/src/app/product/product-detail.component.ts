@@ -26,7 +26,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         //     .switchMap((params: Params) => this.productService.getById(parseInt(params['id'])))
         //     .subscribe(product => this.product = product);
         this.route.params
-            .switchMap((params: Params) => this.productService.getProduct(+params['id']))
+            .switchMap((params: Params) => this.productService.getById(+params['id']))
             .subscribe(product => this.product = product);
     }
 
@@ -37,7 +37,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     addToCart():void {
         console.log("Add product:");
         console.log(this.product);
-        this.accountService.addProduct(this.product.id);
+        this.accountService.addProduct(this.product);
     }
 
     balance():void {
