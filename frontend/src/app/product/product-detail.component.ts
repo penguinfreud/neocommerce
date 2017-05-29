@@ -5,6 +5,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Product } from './product';
 import { ProductService } from './product.service';
 import {AccountService} from "../balance/account.service";
+import {UserService} from "../user/user.service";
 
 @Component({
     selector: 'product-detail',
@@ -16,6 +17,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
     constructor(
         private productService: ProductService,
+        private userService: UserService,
         private accountService: AccountService,
         private route: ActivatedRoute,
         private router: Router,) {
@@ -35,12 +37,18 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     }
     
     addToCart():void {
+        if (!this.userService.getCurrent()) {
+            this.router.navigate(["login"]);
+        }
         console.log("Add product:");
         console.log(this.product);
         this.accountService.addProduct(this.product);
     }
 
     balance():void {
+        if (!this.userService.getCurrent()) {
+            this.router.navigate(["login"]);
+        }
         this.router.navigate(["balance"]);
     }
 }

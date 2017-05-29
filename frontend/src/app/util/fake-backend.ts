@@ -14,6 +14,7 @@ const PRODUCTS: any[] = [
         price: 12335242, buyers: 8, provider: "NEOCommerce", factory: "Shenzhen"}
 ];
 
+
 export let fakeBackendProvider = {
     // use fake backend in place of Http service for backend-less development
     provide: Http,
