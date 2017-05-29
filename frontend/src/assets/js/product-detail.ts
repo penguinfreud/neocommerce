@@ -22,9 +22,9 @@ var MODEL_POS = [
     [0, 0, 0],
 ];
 var MODEL_SCALE = [
-    0.3, 0.15, 0.1,
+    0.3, 0.15, 0.4,
 ];
-var MODELS = ["Mercedes-Benz-G500", "mystik_dsrv_CC50", "Hetzer_2"];
+var MODELS = ["Mercedes-Benz-G500", "mystik_dsrv_CC50", "PrismaPM14"];
 function onUnload() {
     console.log("unload callled");
     while (scene.children.length > 0) {
@@ -70,7 +70,7 @@ function threedshow() {
         scene.add(skyBox);
         var ambient = new THREE.AmbientLight(0xffffff);
         scene.add(ambient);
-        var directionalLight = new THREE.DirectionalLight(0xffffff);
+        var directionalLight = new THREE.DirectionalLight(0x0a0a0a);
         directionalLight.position.set(-5, 5, 5).normalize();
         scene.add(directionalLight);
         var pointLight = new THREE.PointLight(0x63d5ff, 1, 200);

@@ -22,9 +22,16 @@ export class BalanceComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.products = this.acountService.getCart();
+        this.acountService.getCart().then(res => this.products = res);
         this.total = this.acountService.total;
         console.log(this.products);
+    }
+
+    private calculateTotal():number {
+        let sum: number;
+        for (let product in this.products) {
+            sum += product.price;
+        }
     }
 
 }

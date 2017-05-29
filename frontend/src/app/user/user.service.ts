@@ -8,7 +8,7 @@ import { User } from './user';
 
 @Injectable()
 export class UserService {
-    private currentUser: Subject<User> = new Subject<User>()
+    private currentUser: Subject<User> = new Subject<User>();
     constructor(private http: Http) { }
 
     getAll() {
