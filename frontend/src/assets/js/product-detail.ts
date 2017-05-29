@@ -37,19 +37,11 @@ function threedshow() {
     container = document.getElementById("canvas_container");
     var product_name = document.getElementById('product-name').innerText;
     // console.log(product_name);
-    var selection = 0;
-    var i = -1;
-    for (; i < MODELS.length; i++) {
-        if (product_name === MODELS[i]) {
-            selection = i;
-            break;
-        }
-    }
-    if (i == -1) {
+    var selection = MODELS.indexOf(product_name);
+    if (selection === -1) {
         console.log("Error in reading model name");
-        i = 0;
-    }
-    else {
+        return;
+    } else {
         console.log("No error in reading model name");
     }
     camera.position.set(CAM_POS[selection][0], CAM_POS[selection][1], CAM_POS[selection][2]);
