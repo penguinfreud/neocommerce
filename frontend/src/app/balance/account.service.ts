@@ -2,17 +2,20 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
 
 import { Product } from '../product/product';
+import { Cart } from './cart';
 import {User} from '../user/user';
 import { ProductService } from '../product/product.service';
 import {UserService} from "../user/user.service";
+import {Order} from "./order";
 
 @Injectable()
 export class AccountService {
     // products: Product[] = [];
-    private cartUrl: string = "api/cart";
+    private cartUrl: string = "/api/cart";
     private headers = new Headers({'Content-Type': 'application/json'});
 
     constructor(private http: Http, private userServ: UserService) { }
@@ -22,52 +25,30 @@ export class AccountService {
     *       through a product object or id
     * */
     // post api/cart
-    addProduct(product: Product): Promise<Product>{
-        let currentUser: User;
-        this.userServ.getCurrent().toPromise().then(res => currentUser = res).catch(this.handleError);
-        return this.http.post(this.cartUrl, JSON.stringify({product: product, token: currentUser.token}), {headers: this.headers})
+    addProduct(product: Product, currentUser: User): Promise<Cart>{
+        console.log("addProduct in account service called.");
+        return this.http.post(this.cartUrl, JSON.stringify({product: product, id: currentUser.id, token: currentUser.token}), {headers: this.headers})
             .toPromise()
-            .then(res => res.json().data as Product)
+            .then(res => res.json().data as Cart)
             .catch(this.handleError);
-
-        // let iD = id.valueOf();
-        // let product: Product;
-        // this.productService.getProduct(iD).then(p => product = p);
-        // if (product) {
-        //     this.products.push(product);
-        //     this.total += product.price;
-        // }
-        // console.log("id" + id);
-        // console.log(iD);
-        // console.log(this.total);
-        // console.log(product);
-        // return Promise.resolve(undefined);
     }
 
-    // delete api/cart/product_id
-    removeProduct(id: number): Promise<void> {
+    // delete api/cart/order_id
+    removeOrder(id: number): Promise<void> {
         const url = `${this.cartUrl}/${id}`;
         return this.http.delete(url, {headers: this.headers})
             .toPromise()
             .then(() => null)
             .catch(this.handleError);
-
-        // let index = this.products.indexOf(product, 0);
-        // if (index > -1) {
-        //     // delete this item
-        //     this.products.slice(index, 1);
-        // }
-        // console.log(this.total);
     }
 
-    // get api/cart/usrToken
-    getCart(): Promise<Product[]> {
-        // return this.products;
-        let currentUser: User;
-        this.userServ.getCurrent().toPromise().then(res => currentUser = res).catch(this.handleError);
-        return this.http.get(`${this.cartUrl}/${currentUser.token}`)
+    // get api/cart/usr_id
+    getCart(): Promise<Cart> {
+        let currentUser = JSON.parse(localStorage.getItem('currentUser')) ;
+        // this.userServ.getCurrent().toPromise().then(res => currentUser = res).catch(this.handleError);
+        return this.http.get(`${this.cartUrl}/${currentUser.id}`)
             .toPromise()
-            .then(res => res.json().data as Product[])
+            .then(res => res.json().data as Cart)
             .catch(this.handleError);
     }
 

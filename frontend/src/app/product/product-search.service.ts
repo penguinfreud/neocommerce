@@ -9,7 +9,7 @@ import 'rxjs/add/operator/map';
 
 import { Product } from './product';
 
-@Injectable
+@Injectable()
 export class ProductSearchService {
     constructor (private http: Http) {}
     search(term: string): Observable<Product[]> {

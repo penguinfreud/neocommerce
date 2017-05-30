@@ -18,7 +18,7 @@
     </div>
 </div>
 <div class="detail-container" *ngIf="products">
-    <div class="product-item" *ngFor="let product of products | async" (click)="gotoDetail(product)">
+    <div class="product-item" *ngFor="let product of products" (click)="gotoDetail(product)">
         <a class="img">
             <img src="model/{{product.name}}/large_thumbnail.jpg" id="{{product.id}}">
         </a>

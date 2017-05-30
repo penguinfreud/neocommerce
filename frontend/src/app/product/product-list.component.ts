@@ -11,7 +11,7 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 
 import { Product } from './product';
-// import { ProductService } from './product.service';
+import { ProductService } from './product.service';
 import {ProductSearchService} from "./product-search.service";
 
 @Component({
@@ -24,22 +24,22 @@ export class ProductListComponent implements OnInit {
     products: Observable<Product[]>;
     private searchTerms = new Subject<string>();
 
-    constructor(private productSearchService: ProductSearchService,
+    constructor(private productService: ProductService,
+                private productSearchService: ProductSearchService,
                 private router: Router) {}
     
     ngOnInit():void {
-        this.products = this.searchTerms
-            .debounceTime(300)
-            .distinctUntilChanged()
-            .switchMap(term => term
-                ? this.productSearchService.search(term)
-                : Observable.of<Product[]>([]))
-            .catch(error => {
-                console.log(error);
-                return Observable.of<Product[]>([]);
-            });
-        // this.productService.getAll().subscribe(products => this.products = products);
-        // this.productService.getProducts().then(products => this.products = products);
+        // this.products = this.searchTerms
+        //     .debounceTime(300)
+        //     .distinctUntilChanged()
+        //     .switchMap(term => term
+        //         ? this.productSearchService.search(term)
+        //         : Observable.of<Product[]>([]))
+        //     .catch(error => {
+        //         console.log(error);
+        //         return Observable.of<Product[]>([]);
+        //     });
+        this.productService.getAll().subscribe(products => this.products = products);
     }
 
     gotoDetail(product: Product): void {

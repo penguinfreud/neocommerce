@@ -6,6 +6,7 @@ import { Product } from './product';
 import { ProductService } from './product.service';
 import {AccountService} from "../balance/account.service";
 import {UserService} from "../user/user.service";
+import {User} from "../user/user";
 
 @Component({
     selector: 'product-detail',
@@ -35,14 +36,16 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     ngOnDestroy():void {
         onUnload();
     }
-    
+
+    // TODO
+    // test if addProduct can be called successfully
     addToCart():void {
-        if (!this.userService.getCurrent()) {
-            this.router.navigate(["login"]);
+        let currentUser = this.validateLogIn();
+        // console.log(currentUser);
+        if (!currentUser) {
+            this.router.navigate(['login']);
         }
-        console.log("Add product:");
-        console.log(this.product);
-        this.accountService.addProduct(this.product);
+        let cart = this.accountService.addProduct(this.product, currentUser);
     }
 
     balance():void {
@@ -50,5 +53,16 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             this.router.navigate(["login"]);
         }
         this.router.navigate(["balance"]);
+    }
+     private handleError(error: any): Promise<any> {
+        console.error('An error occurred in account service', error);
+        return Promise.reject(error.message || error);
+    }
+    private validateLogIn(): User {
+        let user = JSON.parse(localStorage.getItem('currentUser')) ;
+        if (user && user.token) {
+            return user;
+        } else
+            return null;
     }
 }
