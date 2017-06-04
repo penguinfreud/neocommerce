@@ -1,13 +1,52 @@
 /**
  * Created by 11206 on 2017/5/7.
  */
+interface Vector3 {
+    set: (x:number, y:number, z:number) => Vector3
+    normalize: () => Vector3
+}
+
+interface Object3D {
+    position: Vector3
+    scale: Vector3
+}
+
+interface Scene extends Object3D {
+    children: Object3D[]
+    add: (child: Object3D) => void
+    remove: (child: Object3D) => void
+}
+
+interface Renderer {
+    setSize: (width: number, height: number) => void
+    setPixelRatio: (ratio: number) => void
+    render: (scene: Scene, camera: Object3D) => void
+    domElement: HTMLElement
+}
+
+declare var THREE: {
+    Scene: new () => Scene
+    PerspectiveCamera: new (fov: number, aspect: number, far: number, near: number) => Object3D
+    GridHelper: new (size: number, divisions: number) => Object3D
+    AmbientLight: new (color: number) => Object3D
+    DirectionalLight: new (color: number) => Object3D
+    WebGLRenderer: new () => Renderer
+    ColladaLoader: new () => {
+        options: {
+            convertUpAxis: boolean
+        }
+        load: (path: string, callback: (obj: { scene: Scene }) => void) => void
+    }
+    OrbitControls: new (camera: Object3D, elem: HTMLElement) => {}
+}
+
 var container;
 // var stats;
-var scene;
+var scene:Scene;
 var VIEW_ANGLE = 45, ASPECT = 1, NEAR = 0.3, FAR = 1000;
-var renderer;
+var renderer:Renderer;
 var controls;
-var camera;
+var camera:Object3D;
 // tune x: horizontal y: vertical z: distance
 // camera.position.set(-25, 20 , -50);
 var CAM_POS = [
