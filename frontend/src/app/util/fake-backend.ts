@@ -19,34 +19,6 @@ class UserCart {
     cart: Cart;
 }
 
-export function showOrders(cart: UserCart): void {
-    console.log("user id:" + cart.id);
-    let shops = cart.cart.shopOrders;
-    for (let shop of shops) {
-        console.log("shop name:" + shop.shop);
-        let orders = shop.orders;
-        for (let order of orders) {
-            console.log("  id:" + order.id + " user:" + order.user.id + " product:"+order.product.name);
-        }
-    }
-}
-export function showOrder(cart: Cart): void {
-    let shops = cart.shopOrders;
-    for (let shop of shops) {
-        console.log("shop name:" + shop.shop);
-        let orders = shop.orders;
-        for (let order of orders) {
-            console.log("  id:" + order.id + " user:" + order.user.id + " product:"+order.product.name);
-        }
-    }
-}
-
-// TODO: JSON.parse not appropriate for parse an object which contains map
-//       thus, maybe i should define and export a function to parse a Cart
-//       to be used in backend and balance.component
-export function parseJSON(str: string): Cart {
-    return null;
-}
 export let fakeBackendProvider = {
     // use fake backend in place of Http service for backend-less development
     provide: Http,
@@ -196,17 +168,13 @@ export let fakeBackendProvider = {
                 if (connection.request.url.endsWith('/api/cart') && connection.request.method === RequestMethod.Post) {
                     // add a product to user's cart
                     console.log("In fake backend add product");
-                    console.log("length is " + users.length);
-                    console.log("users:" + users);
                     let params =  JSON.parse(connection.request.getBody());
                     let id = params.id;
                     let product = params.product;
                     let token = params.token;
-                    if (id < users.length && token === 'fake-jwt-token') {
-                        let user = users[id];
-                        console.log("selected user:" + user);
-                        let newOrder = {id: order_id, user: user, product: product, selected: true};
-                        console.log("before update, cart is " + carts);
+                    if (id <= users.length && token === 'fake-jwt-token') {
+                        let user = users[id-1];
+                        let newOrder = {id: order_id, user_id: id, product: product, selected: true};
                         let filteredCart = carts.filter(cart => {
                             return cart.id === user.id;
                         });
@@ -229,14 +197,10 @@ export let fakeBackendProvider = {
                             carts.push({id: id, cart: cart});
                             selectedCart = carts[0].cart;
                         }
-                        // filteredCart = carts.filter(cart => {
-                        //     return cart.id === id;
-                        // });
                         order_id += 1;
-                        console.log("returned cart:" + selectedCart);
                         localStorage.setItem("user_carts", JSON.stringify(carts));
                         localStorage.setItem('order_id', JSON.stringify(order_id));
-                        connection.mockRespond(new Response(new ResponseOptions({status: 200, body: selectedCart })));
+                        connection.mockRespond(new Response(new ResponseOptions({status: 200, body: JSON.stringify(selectedCart)})));
                     } else {
                         connection.mockError(new Error("No such user. Please log in first."));
                     }
@@ -247,21 +211,16 @@ export let fakeBackendProvider = {
                 if ( n && connection.request.method == RequestMethod.Get) {
                     console.log("In fake backend get cart");
                     let id = parseInt(n[1]);
-                    console.log("id is " + id);
                     let filteredUsers = users.filter(user => {
                        return user.id === id;
                     });
                     if (filteredUsers.length) {
                         let user = filteredUsers[0];
-                        console.log("user is " + user.id + user.name);
-                        for (let _cart of carts) {
-                            showOrders(_cart);
-                        }
                         let filteredCart = carts.filter(cart => {
                             return cart.id === user.id;
                         });
                         if (filteredCart.length)
-                            connection.mockRespond(new Response(new ResponseOptions({status: 200, body: filteredCart[0].cart})));
+                            connection.mockRespond(new Response(new ResponseOptions({status: 200, body: JSON.stringify(filteredCart[0].cart)})));
                         else
                             connection.mockRespond(new Response(new ResponseOptions({status: 200, body: {shopOrders: []}})));
                     } else {

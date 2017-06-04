@@ -16,7 +16,7 @@
                     <div class="shop">
                         <div class="shop-info">
                             <div class="cart-checkbox">
-                                <input class="shopcheckbox" name="orders[]" value="" type="checkbox">
+                                <input class="shopcheckbox" name="orders[]" value="" type="checkbox" [checked]="shopSelected(shop)">
                                 <label></label>
                             </div>
                             &nbsp;&nbsp;店铺：<span class="shop-name">{{shop.shop}}</span>
@@ -24,10 +24,9 @@
                     </div>
                     <!--each product of this shop, presented by ul-->
                     <div class="order-content">
-                        <ul class="item-content" *ngFor="let order of shop.orders"
-                                [class.selected]="order.selected">
+                        <ul class="item-content" *ngFor="let order of shop.orders">
                             <li class="td cart-checkbox p-checkbox">
-                                <input type="checkbox" name="checkItem">
+                                <input type="checkbox" [checked]="order.selected" name="checkItem" >
                                 <label for>勾选商品</label>
                             </li>
                             <li class="td name">
@@ -38,38 +37,9 @@
                             <li class="td price">{{order.product.price}}</li>
                             <li class="td amount" #this_amount>1</li>
                             <li class="td sum">{{order.product.price * 1}}</li>
-                            <li class="td rm"><a class="remove-btn" (click)="delete(order)">remove</a></li>
+                            <li class="td rm"><span class="remove-btn" (click)="delete(order)">X</span></li>
                         </ul>
-                        <!--<ul class="item-content">-->
-                            <!--<li class="td cart-checkbox p-checkbox">-->
-                                <!--<input type="checkbox" name="checkItem">-->
-                                <!--<label for>勾选商品</label>-->
-                            <!--</li>-->
-                            <!--<li class="td name">-->
-                                <!--<div class="item-pic"><img src="model/MERCEDES-BENZ-G500/large_thumbnail.jpg"></div>-->
-                                <!--<div class="item-info">MERCEDES-BENZ-G500</div>-->
-                            <!--</li>-->
-                            <!--<li class="td info"><div></div></li>-->
-                            <!--<li class="td price">88888</li>-->
-                            <!--<li class="td amount">1</li>-->
-                            <!--<li class="td sum">88888</li>-->
-                            <!--<li class="td rm"><a class="remove-btn">remove</a></li>-->
-                        <!--</ul>-->
-                        <!--<ul class="item-content">-->
-                            <!--<li class="td cart-checkbox p-checkbox">-->
-                                <!--<input type="checkbox" name="checkItem">-->
-                                <!--<label for>勾选商品</label>-->
-                            <!--</li>-->
-                            <!--<li class="td name">-->
-                                <!--<div class="item-pic"><img src="model/MYSTIK_DSRV_CC50/large_thumbnail.jpg"></div>-->
-                                <!--<div class="item-info">MYSTIK_DSRV_CC50</div>-->
-                            <!--</li>-->
-                            <!--<li class="td info"><div></div></li>-->
-                            <!--<li class="td price">12335242</li>-->
-                            <!--<li class="td amount">1</li>-->
-                            <!--<li class="td sum">12335242</li>-->
-                            <!--<li class="td rm"><a class="remove-btn">remove</a></li>-->
-                        <!--</ul>-->
+
                     </div>
                 </div>
 
@@ -92,5 +62,3 @@
         </div>
     </div>
 </div>
-
-

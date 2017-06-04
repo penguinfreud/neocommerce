@@ -9,4 +9,7 @@ public class NeocommerceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(NeocommerceApplication.class, args);
 	}
+
+	@Bean
+	public CommandLineRunner commandLineRunner()
 }

@@ -4,10 +4,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Cart } from './cart';
+import {Cart, ShopOrder} from './cart';
 import { AccountService } from './account.service';
 import {Order} from "./order";
-import {showOrder} from "../util/fake-backend";
 
 @Component({
     selector: 'balance',
@@ -26,22 +25,27 @@ export class BalanceComponent implements OnInit {
 
     ngOnInit() {
         this.cart = {shopOrders: []};
-        this.accountService.getCart().then(res => this.cart = res);
-        console.log("In balance component: cart is");
-        showOrder(this.cart);
-        this.total = this.calculateTotal();
-        console.log("quit balance: cart is");
-        showOrder(this.cart);
+        this.accountService.getCart().then(res => {
+            this.cart = res;
+            this.total = this.calculateTotal();
+        });
     }
 
     private calculateTotal():number {
         let sum: number = 0;
         for (let o of this.cart.shopOrders) {
             for (let order of o.orders) {
-                sum += order.product.price;
+                if (order.selected) {
+                    sum += order.product.price;
+                }
             }
         }
         return sum;
+    }
+
+    shopSelected(shop: ShopOrder): boolean {
+        let filt = shop.orders.filter(sh => !sh.selected);
+        return filt.length == 0;
     }
 
     selectAll():void {

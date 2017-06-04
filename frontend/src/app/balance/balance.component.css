@@ -190,6 +190,6 @@
 .operations .rm-selected {
     cursor: pointer;
 }
-.selected {
-
+.remove-btn {
+    cursor: pointer;
 }
