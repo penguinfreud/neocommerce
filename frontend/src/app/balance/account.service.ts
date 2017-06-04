@@ -26,7 +26,6 @@ export class AccountService {
     * */
     // post api/cart
     addProduct(product: Product, currentUser: User): Promise<Cart>{
-        console.log("addProduct in account service called.");
         return this.http.post(this.cartUrl, JSON.stringify({product: product, id: currentUser.id, token: currentUser.token}), {headers: this.headers})
             .toPromise()
             .then(res => res.json().data as Cart)
@@ -48,7 +47,10 @@ export class AccountService {
         // this.userServ.getCurrent().toPromise().then(res => currentUser = res).catch(this.handleError);
         return this.http.get(`${this.cartUrl}/${currentUser.id}`)
             .toPromise()
-            .then(res => res.json().data as Cart)
+            .then(res => {
+                let tmp = res.json().data;
+                return res.json();
+            })
             .catch(this.handleError);
     }
 

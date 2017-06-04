@@ -6,8 +6,6 @@ import {Cart, ShopOrder} from "../balance/cart";
 import {Order} from "../balance/order";
 
 var PRODUCTS: any[] = [
-    // {id:1, name: "Hetzer_2", desc: "The Jagdpanzer 38 (Sd.Kfz. 138/2), later known as Hetzer (\"pursuer/hunter\"), was a German light tank destroyer of the Second World War based on a modified Czechoslovakian Panzer 38(t) chassis. The project was inspired by the Romanian \"Mareşal\" tank destroyer.",
-    //     price: 6553600, buyers: 64, provider: "NEOCommerce", factory: "Shanghai"},
     {id:0, name: "PrismaPM14", desc:"A simple desk system",
         price: 256, buyers: 12, provider:"NEOCommerce", factory: "Shanghai"},
     {id:1, name: "Drehstuhl", desc: "Office chair",
@@ -15,35 +13,16 @@ var PRODUCTS: any[] = [
     {id:2, name: "ChairDesk", desc: "Chair Desk for Schools.",
         price: 233, buyers: 89, provider: "NEOCommerce", factory: "Shenzhen"}
 ];
-class UserCart {
-    user: User;
-    cart: Cart;
 
-}
-export function showOrders(cart: UserCart): void {
-    console.log("user id:" + cart.user.id);
-    let shops = cart.cart.shopOrders;
-    for (let shop of shops) {
-        console.log("shop name:" + shop.shop);
-        let orders = shop.orders;
-        for (let order of orders) {
-            console.log("  id:" + order.id + " user:" + order.user.id + " product:"+order.product.name);
-        }
-    }
-}
-export function showOrder(cart: Cart): void {
-    let shops = cart.shopOrders;
-    for (let shop of shops) {
-        console.log("shop name:" + shop.shop);
-        let orders = shop.orders;
-        for (let order of orders) {
-            console.log("  id:" + order.id + " user:" + order.user.id + " product:"+order.product.name);
-        }
-    }
+class UserCart {
+    id: number;
+    cart: Cart;
 }
 
 export function useFactory(backend: MockBackend, options: BaseRequestOptions) {
     // array in local storage for registered users
+    // localStorage.removeItem("user_carts");
+
     let users: any[] = JSON.parse(localStorage.getItem('users')) || [];
     // let products: any[] = JSON.parse(localStorage.getItem('products')) || [ { id: 1, name: 'product foo', price: 99, description: 'product description' } ];
     let products: any[] = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
@@ -183,24 +162,20 @@ export function useFactory(backend: MockBackend, options: BaseRequestOptions) {
             }
 
             // add a product to user's cart
-            // TODO: duralize to storage undone
             if (connection.request.url.endsWith('/api/cart') && connection.request.method === RequestMethod.Post) {
                 // add a product to user's cart
                 console.log("In fake backend add product");
-                console.log("length is " + users.length);
-                console.log("users:" + users);
                 let params =  JSON.parse(connection.request.getBody());
                 let id = params.id;
                 let product = params.product;
                 let token = params.token;
-                if (id < users.length && token === 'fake-jwt-token') {
-                    let user = users[id];
-                    console.log("selected user:" + user);
-                    let newOrder = {id: order_id, user: user, product: product, selected: true};
-                    console.log("before update, cart is " + carts);
+                if (id <= users.length && token === 'fake-jwt-token') {
+                    let user = users[id-1];
+                    let newOrder = {id: order_id, user_id: id, product: product, selected: true};
                     let filteredCart = carts.filter(cart => {
-                        return cart.user === user;
+                        return cart.id === user.id;
                     });
+                    let selectedCart;
                     if (filteredCart.length) {
                         let cart = filteredCart[0].cart;
                         let filteredShopOrders = cart.shopOrders.filter( shop => {
@@ -212,19 +187,17 @@ export function useFactory(backend: MockBackend, options: BaseRequestOptions) {
                         } else {
                             cart.shopOrders.push({shop: product.provider, orders:[newOrder]});
                         }
+                        selectedCart = cart;
                     } else {
                         let shop: ShopOrder = {shop: product.provider, orders: [newOrder]};
                         let cart:Cart = {shopOrders: [shop]};
-                        carts.push({user: user, cart: cart});
+                        carts.push({id: id, cart: cart});
+                        selectedCart = carts[0].cart;
                     }
-                    filteredCart = carts.filter(cart => {
-                        return cart.user === user;
-                    });
                     order_id += 1;
-                    connection.mockRespond(new Response(new ResponseOptions({status: 200, body: filteredCart[0].cart })));
-                    console.log("returned cart:" + filteredCart[0].cart);
                     localStorage.setItem("user_carts", JSON.stringify(carts));
                     localStorage.setItem('order_id', JSON.stringify(order_id));
+                    connection.mockRespond(new Response(new ResponseOptions({status: 200, body: JSON.stringify(selectedCart)})));
                 } else {
                     connection.mockError(new Error("No such user. Please log in first."));
                 }
@@ -235,21 +208,16 @@ export function useFactory(backend: MockBackend, options: BaseRequestOptions) {
             if ( n && connection.request.method == RequestMethod.Get) {
                 console.log("In fake backend get cart");
                 let id = parseInt(n[1]);
-                console.log("id is " + id);
                 let filteredUsers = users.filter(user => {
                     return user.id === id;
                 });
                 if (filteredUsers.length) {
                     let user = filteredUsers[0];
-                    console.log("user is " + user.id + user.name);
-                    for (let _cart of carts) {
-                        showOrders(_cart);
-                    }
                     let filteredCart = carts.filter(cart => {
-                        return cart.user.id === user.id;
+                        return cart.id === user.id;
                     });
                     if (filteredCart.length)
-                        connection.mockRespond(new Response(new ResponseOptions({status: 200, body: filteredCart[0].cart})));
+                        connection.mockRespond(new Response(new ResponseOptions({status: 200, body: JSON.stringify(filteredCart[0].cart)})));
                     else
                         connection.mockRespond(new Response(new ResponseOptions({status: 200, body: {shopOrders: []}})));
                 } else {
