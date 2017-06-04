@@ -1,4 +1,4 @@
-package edu.fudan;
+package edu.fudan.neocommerce;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

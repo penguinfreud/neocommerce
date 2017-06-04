@@ -41,229 +41,232 @@ export function showOrder(cart: Cart): void {
         }
     }
 }
-export let fakeBackendProvider = {
-    // use fake backend in place of Http service for backend-less development
-    provide: Http,
-    useFactory: (backend: MockBackend, options: BaseRequestOptions) => {
-        // array in local storage for registered users
-        let users: any[] = JSON.parse(localStorage.getItem('users')) || [];
-        // let products: any[] = JSON.parse(localStorage.getItem('products')) || [ { id: 1, name: 'product foo', price: 99, description: 'product description' } ];
-        let products: any[] = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
-        let carts: UserCart[] = JSON.parse(localStorage.getItem('user_carts')) || [];
-        let order_id: number = JSON.parse(localStorage.getItem('order_id')) || 0;
 
-        // configure fake backend
-        backend.connections.subscribe((connection: MockConnection) => {
-            // wrap in timeout to simulate server api call
-            setTimeout(() => {
+export function useFactory(backend: MockBackend, options: BaseRequestOptions) {
+    // array in local storage for registered users
+    let users: any[] = JSON.parse(localStorage.getItem('users')) || [];
+    // let products: any[] = JSON.parse(localStorage.getItem('products')) || [ { id: 1, name: 'product foo', price: 99, description: 'product description' } ];
+    let products: any[] = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
+    let carts: UserCart[] = JSON.parse(localStorage.getItem('user_carts')) || [];
+    let order_id: number = JSON.parse(localStorage.getItem('order_id')) || 0;
 
-                // authenticate
-                if (connection.request.url.endsWith('/api/login') && connection.request.method === RequestMethod.Post) {
-                    // get parameters from post request
-                    let params = JSON.parse(connection.request.getBody());
+    // configure fake backend
+    backend.connections.subscribe((connection: MockConnection) => {
+        // wrap in timeout to simulate server api call
+        setTimeout(() => {
 
-                    // find if any user matches login credentials
-                    let filteredUsers = users.filter(user => {
-                        return user.username === params.username && user.password === params.password;
-                    });
+            // authenticate
+            if (connection.request.url.endsWith('/api/login') && connection.request.method === RequestMethod.Post) {
+                // get parameters from post request
+                let params = JSON.parse(connection.request.getBody());
 
-                    if (filteredUsers.length) {
-                        // if login details are valid return 200 OK with user details and fake jwt token
-                        let user = filteredUsers[0];
-                        connection.mockRespond(new Response(new ResponseOptions({
-                            status: 200,
-                            body: {
-                                id: user.id,
-                                username: user.username,
-                                name: user.name,
-                                token: 'fake-jwt-token',
-                                type: user.type,
-                            }
-                        })));
-                    } else {
-                        // else return 400 bad request
-                        connection.mockError(new Error('Username or password is incorrect'));
-                    }
+                // find if any user matches login credentials
+                let filteredUsers = users.filter(user => {
+                    return user.username === params.username && user.password === params.password;
+                });
+
+                if (filteredUsers.length) {
+                    // if login details are valid return 200 OK with user details and fake jwt token
+                    let user = filteredUsers[0];
+                    connection.mockRespond(new Response(new ResponseOptions({
+                        status: 200,
+                        body: {
+                            id: user.id,
+                            username: user.username,
+                            name: user.name,
+                            token: 'fake-jwt-token',
+                            type: user.type,
+                        }
+                    })));
+                } else {
+                    // else return 400 bad request
+                    connection.mockError(new Error('Username or password is incorrect'));
+                }
+            }
+
+            // get users
+            if (connection.request.url.endsWith('/api/users') && connection.request.method === RequestMethod.Get) {
+                // check for fake auth token in header and return users if valid, this security is implemented server side in a real application
+                if (connection.request.headers.get('Authorization') === 'Bearer fake-jwt-token') {
+                    connection.mockRespond(new Response(new ResponseOptions({ status: 200, body: users })));
+                } else {
+                    // return 401 not authorised if token is null or invalid
+                    connection.mockRespond(new Response(new ResponseOptions({ status: 401 })));
+                }
+            }
+
+            // get user by id
+            if (connection.request.url.match(/\/api\/users\/\d+$/) && connection.request.method === RequestMethod.Get) {
+                // check for fake auth token in header and return user if valid, this security is implemented server side in a real application
+                if (connection.request.headers.get('Authorization') === 'Bearer fake-jwt-token') {
+                    // find user by id in users array
+                    let urlParts = connection.request.url.split('/');
+                    let id = parseInt(urlParts[urlParts.length - 1]);
+                    let matchedUsers = users.filter(user => { return user.id === id; });
+                    let user = matchedUsers.length ? matchedUsers[0] : null;
+
+                    // respond 200 OK with user
+                    connection.mockRespond(new Response(new ResponseOptions({ status: 200, body: user })));
+                } else {
+                    // return 401 not authorised if token is null or invalid
+                    connection.mockRespond(new Response(new ResponseOptions({ status: 401 })));
+                }
+            }
+
+            // create user
+            if (connection.request.url.endsWith('/api/users') && connection.request.method === RequestMethod.Post) {
+                // get new user object from post body
+                let newUser = JSON.parse(connection.request.getBody());
+
+                // validation
+                let duplicateUser = users.filter(user => { return user.username === newUser.username; }).length;
+                if (duplicateUser) {
+                    return connection.mockError(new Error('Username "' + newUser.username + '" is already taken'));
                 }
 
-                // get users
-                if (connection.request.url.endsWith('/api/users') && connection.request.method === RequestMethod.Get) {
-                    // check for fake auth token in header and return users if valid, this security is implemented server side in a real application
-                    if (connection.request.headers.get('Authorization') === 'Bearer fake-jwt-token') {
-                        connection.mockRespond(new Response(new ResponseOptions({ status: 200, body: users })));
-                    } else {
-                        // return 401 not authorised if token is null or invalid
-                        connection.mockRespond(new Response(new ResponseOptions({ status: 401 })));
+                // save new user
+                newUser.id = users.length + 1;
+                newUser.type = UserType.CUSTOMER;
+                users.push(newUser);
+                localStorage.setItem('users', JSON.stringify(users));
+
+                // respond 200 OK
+                connection.mockRespond(new Response(new ResponseOptions({ status: 200 })));
+            }
+
+            // delete user
+            if (connection.request.url.match(/\/api\/users\/\d+$/) && connection.request.method === RequestMethod.Delete) {
+                // check for fake auth token in header and return user if valid, this security is implemented server side in a real application
+                if (connection.request.headers.get('Authorization') === 'Bearer fake-jwt-token') {
+                    // find user by id in users array
+                    let urlParts = connection.request.url.split('/');
+                    let id = parseInt(urlParts[urlParts.length - 1]);
+                    for (let i = 0; i < users.length; i++) {
+                        let user = users[i];
+                        if (user.id === id) {
+                            // delete user
+                            users.splice(i, 1);
+                            localStorage.setItem('users', JSON.stringify(users));
+                            break;
+                        }
                     }
-                }
-
-                // get user by id
-                if (connection.request.url.match(/\/api\/users\/\d+$/) && connection.request.method === RequestMethod.Get) {
-                    // check for fake auth token in header and return user if valid, this security is implemented server side in a real application
-                    if (connection.request.headers.get('Authorization') === 'Bearer fake-jwt-token') {
-                        // find user by id in users array
-                        let urlParts = connection.request.url.split('/');
-                        let id = parseInt(urlParts[urlParts.length - 1]);
-                        let matchedUsers = users.filter(user => { return user.id === id; });
-                        let user = matchedUsers.length ? matchedUsers[0] : null;
-
-                        // respond 200 OK with user
-                        connection.mockRespond(new Response(new ResponseOptions({ status: 200, body: user })));
-                    } else {
-                        // return 401 not authorised if token is null or invalid
-                        connection.mockRespond(new Response(new ResponseOptions({ status: 401 })));
-                    }
-                }
-
-                // create user
-                if (connection.request.url.endsWith('/api/users') && connection.request.method === RequestMethod.Post) {
-                    // get new user object from post body
-                    let newUser = JSON.parse(connection.request.getBody());
-
-                    // validation
-                    let duplicateUser = users.filter(user => { return user.username === newUser.username; }).length;
-                    if (duplicateUser) {
-                        return connection.mockError(new Error('Username "' + newUser.username + '" is already taken'));
-                    }
-
-                    // save new user
-                    newUser.id = users.length + 1;
-                    newUser.type = UserType.CUSTOMER;
-                    users.push(newUser);
-                    localStorage.setItem('users', JSON.stringify(users));
 
                     // respond 200 OK
                     connection.mockRespond(new Response(new ResponseOptions({ status: 200 })));
+                } else {
+                    // return 401 not authorised if token is null or invalid
+                    connection.mockRespond(new Response(new ResponseOptions({ status: 401 })));
                 }
+            }
 
-                // delete user
-                if (connection.request.url.match(/\/api\/users\/\d+$/) && connection.request.method === RequestMethod.Delete) {
-                    // check for fake auth token in header and return user if valid, this security is implemented server side in a real application
-                    if (connection.request.headers.get('Authorization') === 'Bearer fake-jwt-token') {
-                        // find user by id in users array
-                        let urlParts = connection.request.url.split('/');
-                        let id = parseInt(urlParts[urlParts.length - 1]);
-                        for (let i = 0; i < users.length; i++) {
-                            let user = users[i];
-                            if (user.id === id) {
-                                // delete user
-                                users.splice(i, 1);
-                                localStorage.setItem('users', JSON.stringify(users));
-                                break;
-                            }
-                        }
+            // getAll products
+            if (connection.request.url.endsWith('/api/products') && connection.request.method === RequestMethod.Get) {
+                connection.mockRespond(new Response(new ResponseOptions({ status: 200, body: products })));
+            }
 
-                        // respond 200 OK
-                        connection.mockRespond(new Response(new ResponseOptions({ status: 200 })));
-                    } else {
-                        // return 401 not authorised if token is null or invalid
-                        connection.mockRespond(new Response(new ResponseOptions({ status: 401 })));
-                    }
-                }
+            // getById product
+            let m = connection.request.url.match(/\/api\/products\/(\d+)$/);
+            if (m && connection.request.method == RequestMethod.Get) {
+                let id = parseInt(m[1]);
+                let matchedProducts = products.filter(prod => prod.id === id);
+                let product = matchedProducts.length > 0? matchedProducts[0]: null;
+                connection.mockRespond(new Response(new ResponseOptions({ status: 200, body: product })));
+            }
 
-                // getAll products
-                if (connection.request.url.endsWith('/api/products') && connection.request.method === RequestMethod.Get) {
-                    connection.mockRespond(new Response(new ResponseOptions({ status: 200, body: products })));
-                }
+            // add producct
+            if (connection.request.url.endsWith('/api/products') && connection.request.method === RequestMethod.Post) {
+                let newProduct = JSON.parse(connection.request.getBody());
+                newProduct.id = products.length + 1;
+                products.push(newProduct);
+                localStorage.setItem('products', JSON.stringify(products));
+                connection.mockRespond(new Response(new ResponseOptions({ status: 200 })));
+            }
 
-                // getById product
-                let m = connection.request.url.match(/\/api\/products\/(\d+)$/);
-                if (m && connection.request.method == RequestMethod.Get) {
-                    let id = parseInt(m[1]);
-                    let matchedProducts = products.filter(prod => prod.id === id);
-                    let product = matchedProducts.length > 0? matchedProducts[0]: null;
-                    connection.mockRespond(new Response(new ResponseOptions({ status: 200, body: product })));
-                }
-
-                // add producct
-                if (connection.request.url.endsWith('/api/products') && connection.request.method === RequestMethod.Post) {
-                    let newProduct = JSON.parse(connection.request.getBody());
-                    newProduct.id = products.length + 1;
-                    products.push(newProduct);
-                    localStorage.setItem('products', JSON.stringify(products));
-                    connection.mockRespond(new Response(new ResponseOptions({ status: 200 })));
-                }
-
+            // add a product to user's cart
+            // TODO: duralize to storage undone
+            if (connection.request.url.endsWith('/api/cart') && connection.request.method === RequestMethod.Post) {
                 // add a product to user's cart
-                // TODO: duralize to storage undone
-                if (connection.request.url.endsWith('/api/cart') && connection.request.method === RequestMethod.Post) {
-                    // add a product to user's cart
-                    console.log("In fake backend add product");
-                    console.log("length is " + users.length);
-                    console.log("users:" + users);
-                    let params =  JSON.parse(connection.request.getBody());
-                    let id = params.id;
-                    let product = params.product;
-                    let token = params.token;
-                    if (id < users.length && token === 'fake-jwt-token') {
-                        let user = users[id];
-                        console.log("selected user:" + user);
-                        let newOrder = {id: order_id, user: user, product: product, selected: true};
-                        console.log("before update, cart is " + carts);
-                        let filteredCart = carts.filter(cart => {
-                            return cart.user === user;
-                        });
-                        if (filteredCart.length) {
-                            let cart = filteredCart[0].cart;
-                            let filteredShopOrders = cart.shopOrders.filter( shop => {
-                                return shop.shop === product.provider;
-                            });
-                            if (filteredShopOrders.length) {
-                                let shopOrder = filteredShopOrders[0];
-                                shopOrder.orders.push(newOrder);
-                            } else {
-                                cart.shopOrders.push({shop: product.provider, orders:[newOrder]});
-                            }
-                        } else {
-                            let shop: ShopOrder = {shop: product.provider, orders: [newOrder]};
-                            let cart:Cart = {shopOrders: [shop]};
-                            carts.push({user: user, cart: cart});
-                        }
-                        filteredCart = carts.filter(cart => {
-                            return cart.user === user;
-                        });
-                        order_id += 1;
-                        connection.mockRespond(new Response(new ResponseOptions({status: 200, body: filteredCart[0].cart })));
-                        console.log("returned cart:" + filteredCart[0].cart);
-                        localStorage.setItem("user_carts", JSON.stringify(carts));
-                        localStorage.setItem('order_id', JSON.stringify(order_id));
-                    } else {
-                        connection.mockError(new Error("No such user. Please log in first."));
-                    }
-                }
-
-                // get cart of an user
-                let n = connection.request.url.match(/\/api\/cart\/(\d+)$/);
-                if ( n && connection.request.method == RequestMethod.Get) {
-                    console.log("In fake backend get cart");
-                    let id = parseInt(n[1]);
-                    console.log("id is " + id);
-                    let filteredUsers = users.filter(user => {
-                       return user.id === id;
+                console.log("In fake backend add product");
+                console.log("length is " + users.length);
+                console.log("users:" + users);
+                let params =  JSON.parse(connection.request.getBody());
+                let id = params.id;
+                let product = params.product;
+                let token = params.token;
+                if (id < users.length && token === 'fake-jwt-token') {
+                    let user = users[id];
+                    console.log("selected user:" + user);
+                    let newOrder = {id: order_id, user: user, product: product, selected: true};
+                    console.log("before update, cart is " + carts);
+                    let filteredCart = carts.filter(cart => {
+                        return cart.user === user;
                     });
-                    if (filteredUsers.length) {
-                        let user = filteredUsers[0];
-                        console.log("user is " + user.id + user.name);
-                        for (let _cart of carts) {
-                            showOrders(_cart);
-                        }
-                        let filteredCart = carts.filter(cart => {
-                            return cart.user.id === user.id;
+                    if (filteredCart.length) {
+                        let cart = filteredCart[0].cart;
+                        let filteredShopOrders = cart.shopOrders.filter( shop => {
+                            return shop.shop === product.provider;
                         });
-                        if (filteredCart.length)
-                            connection.mockRespond(new Response(new ResponseOptions({status: 200, body: filteredCart[0].cart})));
-                        else
-                            connection.mockRespond(new Response(new ResponseOptions({status: 200, body: {shopOrders: []}})));
+                        if (filteredShopOrders.length) {
+                            let shopOrder = filteredShopOrders[0];
+                            shopOrder.orders.push(newOrder);
+                        } else {
+                            cart.shopOrders.push({shop: product.provider, orders:[newOrder]});
+                        }
                     } else {
-                        connection.mockError(new Error("user not exist"));
+                        let shop: ShopOrder = {shop: product.provider, orders: [newOrder]};
+                        let cart:Cart = {shopOrders: [shop]};
+                        carts.push({user: user, cart: cart});
                     }
+                    filteredCart = carts.filter(cart => {
+                        return cart.user === user;
+                    });
+                    order_id += 1;
+                    connection.mockRespond(new Response(new ResponseOptions({status: 200, body: filteredCart[0].cart })));
+                    console.log("returned cart:" + filteredCart[0].cart);
+                    localStorage.setItem("user_carts", JSON.stringify(carts));
+                    localStorage.setItem('order_id', JSON.stringify(order_id));
+                } else {
+                    connection.mockError(new Error("No such user. Please log in first."));
                 }
+            }
 
-            }, 500);
+            // get cart of an user
+            let n = connection.request.url.match(/\/api\/cart\/(\d+)$/);
+            if ( n && connection.request.method == RequestMethod.Get) {
+                console.log("In fake backend get cart");
+                let id = parseInt(n[1]);
+                console.log("id is " + id);
+                let filteredUsers = users.filter(user => {
+                    return user.id === id;
+                });
+                if (filteredUsers.length) {
+                    let user = filteredUsers[0];
+                    console.log("user is " + user.id + user.name);
+                    for (let _cart of carts) {
+                        showOrders(_cart);
+                    }
+                    let filteredCart = carts.filter(cart => {
+                        return cart.user.id === user.id;
+                    });
+                    if (filteredCart.length)
+                        connection.mockRespond(new Response(new ResponseOptions({status: 200, body: filteredCart[0].cart})));
+                    else
+                        connection.mockRespond(new Response(new ResponseOptions({status: 200, body: {shopOrders: []}})));
+                } else {
+                    connection.mockError(new Error("user not exist"));
+                }
+            }
 
-        });
+        }, 500);
 
-        return new Http(backend, options);
-    },
+    });
+
+    return new Http(backend, options);
+}
+
+export let fakeBackendProvider = {
+    // use fake backend in place of Http service for backend-less development
+    provide: Http,
+    useFactory: useFactory,
     deps: [MockBackend, BaseRequestOptions]
 };

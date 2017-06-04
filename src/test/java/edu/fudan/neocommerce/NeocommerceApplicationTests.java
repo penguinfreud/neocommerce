@@ -1,4 +1,4 @@
-package edu.fudan;
+package edu.fudan.neocommerce;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
