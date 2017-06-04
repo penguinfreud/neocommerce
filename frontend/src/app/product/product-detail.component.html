@@ -14,46 +14,40 @@
             <div class="color-customize">
                 <h2 class="label">Color Customize</h2>
                 <div class="detail">
-                    <div class="detail-item"><div class="detail-left"><h3>车前盖</h3></div>
+                    <div class="detail-item"><div class="detail-left"><h3>desk</h3></div>
                         <div class="detail-right">
-                            <select>
-                                <option value="yellow">黄</option>
-                                <option value="white">白</option>
-                                <option value="black">黑</option>
-                                <option value="red">红</option>
+                            <select (change)="onDeskChange($event.target.value)">
+                                <option *ngFor="let i of colors">{{i}}</option>
                             </select>
                         </div>
                     </div>
-                    <div class="detail-item"><div class="detail-left"><h3>车门</h3></div>
+                    <div class="detail-item"><div class="detail-left"><h3>chair</h3></div>
                         <div class="detail-right">
-                            <select>
-                                <option value="yellow">黄</option>
-                                <option value="white">白</option>
-                                <option value="black">黑</option>
-                                <option value="red">红</option>
+                            <select (change)="onChairChange($event.target.value)">
+                                <option *ngFor="let i of colors">{{i}}</option>
                             </select>
                         </div>
                     </div>
-                    <div class="detail-item"><div class="detail-left"><h3>车身</h3></div>
-                        <div class="detail-right">
-                            <select>
-                                <option value="yellow">黄</option>
-                                <option value="white">白</option>
-                                <option value="black">黑</option>
-                                <option value="red">红</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="detail-item"><div class="detail-left"><h3>反光镜</h3></div>
-                        <div class="detail-right">
-                            <select>
-                                <option value="yellow">黄</option>
-                                <option value="white">白</option>
-                                <option value="black">黑</option>
-                                <option value="red">红</option>
-                            </select>
-                        </div>
-                    </div>
+                    <!--<div class="detail-item"><div class="detail-left"><h3>车身</h3></div>-->
+                        <!--<div class="detail-right">-->
+                            <!--<select>-->
+                                <!--<option value="yellow">黄</option>-->
+                                <!--<option value="white">白</option>-->
+                                <!--<option value="black">黑</option>-->
+                                <!--<option value="red">红</option>-->
+                            <!--</select>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="detail-item"><div class="detail-left"><h3>反光镜</h3></div>-->
+                        <!--<div class="detail-right">-->
+                            <!--<select>-->
+                                <!--<option value="yellow">黄</option>-->
+                                <!--<option value="white">白</option>-->
+                                <!--<option value="black">黑</option>-->
+                                <!--<option value="red">红</option>-->
+                            <!--</select>-->
+                        <!--</div>-->
+                    <!--</div>-->
                 </div>
             </div>
             <div class="performance-bar">
@@ -112,7 +106,8 @@
             <span id="product-name">{{product.name}}</span>
         </div>
         <div class="container" id="canvas_container">
-            <img onload="threedshow()" src="model/Hetzer_2/large_thumbnail.jpg" style="display: none;">
+            <!-- this img is used for detecting when the canvas_container has been loaded to the window -->
+            <img onload="threedshow()" src="model/ChairDesk/large_thumbnail.jpg" style="display: none;">
         </div>
         <div class="model-description">
             {{product.desc}}

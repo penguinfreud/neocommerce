@@ -47,18 +47,7 @@ var VIEW_ANGLE = 45, ASPECT = 1, NEAR = 0.3, FAR = 1000;
 var renderer:Renderer;
 var controls;
 var camera:Object3D;
-// tune x: horizontal y: vertical z: distance
-// camera.position.set(-25, 20 , -50);
-var CAM_POS = [
-    [-25, 20, -50],
-    [-55, 65, 0],
-    [-10, 40, 50],
-];
-var CAM_LOOKAT = [
-    [0, 0, 0],
-    [-30, 50, -10],
-    [10, 20, 10],
-];
+
 var MODEL_POS = [
     [-1, 1, 2.3],
     [-1.2, 0, 0.5],
@@ -125,6 +114,7 @@ function threedshow() {
         loader.options.convertUpAxis = true;
         var model_path = 'model/' + MODELS[selection] + '/model.dae';
         loader.load(model_path, function (collada) {
+            console.log(collada);
             var object = collada.scene;
             var SCALE = MODEL_SCALE[selection];
             object.scale.set(SCALE, SCALE, SCALE);
@@ -156,6 +146,14 @@ function threedshow() {
 
     animate();
     //        window.addEventListener( 'resize', onWindowResize, false );
+}
+
+function switchDeskColor(color: string) {
+
+}
+
+function siwtchChairColor(color: string) {
+
 }
 
 function animate() {

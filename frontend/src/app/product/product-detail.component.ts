@@ -15,6 +15,12 @@ import {User} from "../user/user";
 })
 export class ProductDetailComponent implements OnInit, OnDestroy {
     product: Product;
+    colors: string[] = [
+        "red",
+        "yellow",
+        "blue",
+        "black"
+    ];
 
     constructor(
         private productService: ProductService,
@@ -25,9 +31,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit():void {
-        // this.route.params
-        //     .switchMap((params: Params) => this.productService.getById(parseInt(params['id'])))
-        //     .subscribe(product => this.product = product);
         this.route.params
             .switchMap((params: Params) => this.productService.getById(+params['id']))
             .subscribe(product => this.product = product);
@@ -37,11 +40,16 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         onUnload();
     }
 
-    // TODO
-    // test if addProduct can be called successfully
+    onDeskChange(color: any) {
+        console.log(color);
+    }
+
+    onChairChange(color: any) {
+        console.log(color);
+    }
+
     addToCart():void {
         let currentUser = this.validateLogIn();
-        // console.log(currentUser);
         if (!currentUser) {
             this.router.navigate(['login']);
         }
@@ -54,6 +62,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         }
         this.router.navigate(["balance"]);
     }
+
      private handleError(error: any): Promise<any> {
         console.error('An error occurred in account service', error);
         return Promise.reject(error.message || error);
