@@ -48,9 +48,7 @@ export class BalanceComponent implements OnInit {
         return filt.length == 0;
     }
 
-    selectAll():void {
-
-    }
+    selectAll():void { }
 
     delete(order: Order):void {
         this.accountService.removeOrder(order.id).then(() => {});
