@@ -21,3 +21,4 @@ node_modules/
 /frontend/src/**/*.js
 !/frontend/src/systemjs{.config,.config.extra,-angular-loader}.js
 /frontend/aot/
+/src/main/resources/static/build.js
