@@ -6,8 +6,6 @@ import {Cart, ShopOrder} from "../balance/cart";
 import {Order} from "../balance/order";
 
 var PRODUCTS: any[] = [
-    // {id:1, name: "Hetzer_2", desc: "The Jagdpanzer 38 (Sd.Kfz. 138/2), later known as Hetzer (\"pursuer/hunter\"), was a German light tank destroyer of the Second World War based on a modified Czechoslovakian Panzer 38(t) chassis. The project was inspired by the Romanian \"Mareşal\" tank destroyer.",
-    //     price: 6553600, buyers: 64, provider: "NEOCommerce", factory: "Shanghai"},
     {id:0, name: "PrismaPM14", desc:"A simple desk system",
         price: 256, buyers: 12, provider:"NEOCommerce", factory: "Shanghai"},
     {id:1, name: "Drehstuhl", desc: "Office chair",
@@ -15,13 +13,14 @@ var PRODUCTS: any[] = [
     {id:2, name: "ChairDesk", desc: "Chair Desk for Schools.",
         price: 233, buyers: 89, provider: "NEOCommerce", factory: "Shenzhen"}
 ];
-class UserCart {
-    user: User;
-    cart: Cart;
 
+class UserCart {
+    id: number;
+    cart: Cart;
 }
+
 export function showOrders(cart: UserCart): void {
-    console.log("user id:" + cart.user.id);
+    console.log("user id:" + cart.id);
     let shops = cart.cart.shopOrders;
     for (let shop of shops) {
         console.log("shop name:" + shop.shop);
@@ -41,11 +40,20 @@ export function showOrder(cart: Cart): void {
         }
     }
 }
+
+// TODO: JSON.parse not appropriate for parse an object which contains map
+//       thus, maybe i should define and export a function to parse a Cart
+//       to be used in backend and balance.component
+export function parseJSON(str: string): Cart {
+    return null;
+}
 export let fakeBackendProvider = {
     // use fake backend in place of Http service for backend-less development
     provide: Http,
     useFactory: (backend: MockBackend, options: BaseRequestOptions) => {
         // array in local storage for registered users
+        // localStorage.removeItem("user_carts");
+
         let users: any[] = JSON.parse(localStorage.getItem('users')) || [];
         // let products: any[] = JSON.parse(localStorage.getItem('products')) || [ { id: 1, name: 'product foo', price: 99, description: 'product description' } ];
         let products: any[] = JSON.parse(localStorage.getItem('products')) || PRODUCTS;
@@ -185,7 +193,6 @@ export let fakeBackendProvider = {
                 }
 
                 // add a product to user's cart
-                // TODO: duralize to storage undone
                 if (connection.request.url.endsWith('/api/cart') && connection.request.method === RequestMethod.Post) {
                     // add a product to user's cart
                     console.log("In fake backend add product");
@@ -201,8 +208,9 @@ export let fakeBackendProvider = {
                         let newOrder = {id: order_id, user: user, product: product, selected: true};
                         console.log("before update, cart is " + carts);
                         let filteredCart = carts.filter(cart => {
-                            return cart.user === user;
+                            return cart.id === user.id;
                         });
+                        let selectedCart;
                         if (filteredCart.length) {
                             let cart = filteredCart[0].cart;
                             let filteredShopOrders = cart.shopOrders.filter( shop => {
@@ -214,19 +222,21 @@ export let fakeBackendProvider = {
                             } else {
                                 cart.shopOrders.push({shop: product.provider, orders:[newOrder]});
                             }
+                            selectedCart = cart;
                         } else {
                             let shop: ShopOrder = {shop: product.provider, orders: [newOrder]};
                             let cart:Cart = {shopOrders: [shop]};
-                            carts.push({user: user, cart: cart});
+                            carts.push({id: id, cart: cart});
+                            selectedCart = carts[0].cart;
                         }
-                        filteredCart = carts.filter(cart => {
-                            return cart.user === user;
-                        });
+                        // filteredCart = carts.filter(cart => {
+                        //     return cart.id === id;
+                        // });
                         order_id += 1;
-                        connection.mockRespond(new Response(new ResponseOptions({status: 200, body: filteredCart[0].cart })));
-                        console.log("returned cart:" + filteredCart[0].cart);
+                        console.log("returned cart:" + selectedCart);
                         localStorage.setItem("user_carts", JSON.stringify(carts));
                         localStorage.setItem('order_id', JSON.stringify(order_id));
+                        connection.mockRespond(new Response(new ResponseOptions({status: 200, body: selectedCart })));
                     } else {
                         connection.mockError(new Error("No such user. Please log in first."));
                     }
@@ -248,7 +258,7 @@ export let fakeBackendProvider = {
                             showOrders(_cart);
                         }
                         let filteredCart = carts.filter(cart => {
-                            return cart.user.id === user.id;
+                            return cart.id === user.id;
                         });
                         if (filteredCart.length)
                             connection.mockRespond(new Response(new ResponseOptions({status: 200, body: filteredCart[0].cart})));
