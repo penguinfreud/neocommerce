@@ -6,7 +6,7 @@ import {Cart, ShopOrder} from "../balance/cart";
 import {Order} from "../balance/order";
 
 var PRODUCTS: any[] = [
-    {id:0, name: "PrismaPM14", desc:"A simple desk system",
+    {id:0, name: "ChairDest2", desc:"A desk with papers and a chair",
         price: 256, buyers: 12, provider:"NEOCommerce", factory: "Shanghai"},
     {id:1, name: "Drehstuhl", desc: "Office chair",
         price: 128, buyers: 256, provider: "NEOCommerce", factory: "Beijing"},
