@@ -13,15 +13,15 @@
     border: 1px solid #e9e9e9;
     position: relative;
 }
-.balance-bar {
+.checkout-bar {
     width: 100%;
     height: 50px;
     position: relative;
 }
-.balance-bar .fl {
+.checkout-bar .fl {
     float: left;
 }
-.balance-bar .fr {
+.checkout-bar .fr {
     float: right;
 }
 .th {
@@ -154,10 +154,10 @@
     width: 84px;
     padding: 0 0 0 15px;
 }
-.balance-bar .btn-aera, .balance-bar .total {
+.checkout-bar .btn-aera, .checkout-bar .total {
     float: right;
 }
-.balance-bar .btn-aera a {
+.checkout-bar .btn-aera a {
     display: block;
     position: relative;
     width: 96px;
@@ -170,7 +170,7 @@
     overflow: hidden;
     cursor: pointer;
 }
-.balance-bar .total {
+.checkout-bar .total {
     height: 43px;
     text-align: center;
     color: #e54346;

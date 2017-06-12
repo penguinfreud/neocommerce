@@ -4,7 +4,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { Product } from './product';
 import { ProductService } from './product.service';
-import {AccountService} from "../balance/account.service";
+import {AccountService} from "../checkout/account.service";
 import {UserService} from "../user/user.service";
 import {User} from "../user/user";
 
@@ -60,11 +60,11 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         let cart = this.accountService.addProduct(this.product, currentUser);
     }
 
-    balance():void {
+    checkout():void {
         if (!this.userService.getCurrent()) {
             this.router.navigate(["login"]);
         }
-        this.router.navigate(["balance"]);
+        this.router.navigate(["checkout"]);
     }
 
      private handleError(error: any): Promise<any> {

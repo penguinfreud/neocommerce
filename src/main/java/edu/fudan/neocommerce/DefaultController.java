@@ -31,7 +31,7 @@ public class DefaultController {
             "</body>\n" +
             "</html>\n";
 
-    @RequestMapping({"/", "/products", "/login", "/signup", "/balance", "/detail/**"})
+    @RequestMapping({"/", "/products", "/login", "/signup", "/checkout", "/detail/**"})
     @ResponseBody
     public String defaultMapping() throws IOException {
         return indexHtml;

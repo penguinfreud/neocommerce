@@ -9,15 +9,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Created by wsy on 6/11/17.
  */
-public class UserService {
+public class UsersService {
     public static final AtomicInteger nextId = new AtomicInteger(1);
     private final Map<String, User> users = new ConcurrentHashMap<>();
+    private final Map<Integer, User> userIdMap = new ConcurrentHashMap<>();
 
     {
         try {
             User admin = new User(new UserInfo("admin", "admin", UserInfo.ROLE_ADMIN), encryptPassword("admin"));
-            admin.getUserInfo().setId(nextId.getAndIncrement());
-            users.put("admin", admin);
+            add(admin);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -26,7 +26,9 @@ public class UserService {
     public void add(User user) {
         if (users.putIfAbsent(user.getUserInfo().getUserName(), user) != null)
             throw new RuntimeException("User already exists");
-        user.getUserInfo().setId(nextId.getAndIncrement());
+        int id = nextId.getAndIncrement();
+        user.getUserInfo().setId(id);
+        userIdMap.put(id, user);
     }
 
     public boolean exists(String userName) {
@@ -36,6 +38,7 @@ public class UserService {
     public void remove(User user, TokenService tokenService) {
         if (users.remove(user.getUserInfo().getUserName()) == null)
             throw new RuntimeException("User does not exist");
+        userIdMap.remove(user.getUserInfo().getId());
         user.removeAllTokens(tokenService);
     }
 

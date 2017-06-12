@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 
 import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 import 'rxjs/add/observable/of';
 
 import 'rxjs/add/operator/catch';
@@ -12,7 +12,7 @@ import 'rxjs/add/operator/distinctUntilChanged';
 
 import { Product } from './product';
 import { ProductService } from './product.service';
-import {ProductSearchService} from "./product-search.service";
+import { ProductSearchService } from "./product-search.service";
 
 @Component({
     selector: 'product-list',
@@ -22,7 +22,7 @@ import {ProductSearchService} from "./product-search.service";
 })
 export class ProductListComponent implements OnInit {
     products: Observable<Product[]>;
-    private searchTerms = new Subject<string>();
+    private searchTerms = new ReplaySubject<string>(1);
 
     constructor(private productService: ProductService,
                 private productSearchService: ProductSearchService,

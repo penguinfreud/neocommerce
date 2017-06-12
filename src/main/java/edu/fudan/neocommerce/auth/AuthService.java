@@ -14,7 +14,7 @@ import java.util.UUID;
  */
 public class AuthService {
     @Autowired
-    private UserService userService;
+    private UsersService usersService;
 
     @Autowired
     private TokenService tokenService;
@@ -30,19 +30,19 @@ public class AuthService {
     }
 
     public Token login(String userName, String password) throws NoSuchAlgorithmException {
-        User user = userService.lookup(userName);
+        User user = usersService.lookup(userName);
         if (user == null)
             throw new UserDoesNotExistException(userName);
-        if (Arrays.equals(UserService.encryptPassword(password), user.getPassword()))
+        if (Arrays.equals(UsersService.encryptPassword(password), user.getPassword()))
             return tokenService.add(user);
         throw new IncorrectPasswordException();
     }
 
     public User signup(String userName, String name, String password) throws NoSuchAlgorithmException {
-        if (userService.exists(userName))
+        if (usersService.exists(userName))
             throw new UserAlreadyExistsException(userName);
-        User user = new User(new UserInfo(userName, name, UserInfo.ROLE_CUSTOMER), UserService.encryptPassword(password));
-        userService.add(user);
+        User user = new User(new UserInfo(userName, name, UserInfo.ROLE_CUSTOMER), UsersService.encryptPassword(password));
+        usersService.add(user);
         return user;
     }
 

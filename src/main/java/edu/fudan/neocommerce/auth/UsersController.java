@@ -22,7 +22,7 @@ public class UsersController {
     private TokenService tokenService;
 
     @Autowired
-    private UserService userService;
+    private UsersService usersService;
 
     private void checkAuth(String auth) {
         Token token = authService.getToken(auth);
@@ -41,7 +41,7 @@ public class UsersController {
     @ResponseBody
     public UserInfo getUser(@RequestHeader("Authorization") String auth, @PathVariable(name = "username") String userName) {
         checkAuth(auth);
-        return userService.lookup(userName).getUserInfo();
+        return usersService.lookup(userName).getUserInfo();
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -57,7 +57,7 @@ public class UsersController {
         Token token = authService.getToken(auth);
         if (token == null || !token.getUser().getUserInfo().getUserName().equals(userName))
             throw new UnauthorizedException();
-        userService.remove(token.getUser(), tokenService);
+        usersService.remove(token.getUser(), tokenService);
         return "null";
     }
 }

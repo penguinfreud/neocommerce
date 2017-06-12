@@ -1,17 +1,23 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs';
-import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map'
 
 import { User } from './user';
+import {ReplaySubject} from "rxjs/ReplaySubject";
 
 let reqOpt = new RequestOptions({ headers: new Headers({ 'Content-Type': 'application/json', 'Accept': 'application/json' }) });
 
 @Injectable()
 export class UserService {
-    private currentUser: Subject<User> = new Subject<User>();
-    constructor(private http: Http) { }
+    private currentUser: ReplaySubject<User> = new ReplaySubject<User>(1);
+    constructor(private http: Http) {
+        let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        console.log(currentUser);
+        if (currentUser && currentUser.token) {
+            this.currentUser.next(currentUser);
+        }
+    }
 
     getAll() {
         return this.http.get('/api/users', this.jwt()).map((response: Response) => response.json());

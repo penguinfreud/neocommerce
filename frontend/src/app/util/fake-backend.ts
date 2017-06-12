@@ -2,8 +2,8 @@ import { Http, BaseRequestOptions, Response, ResponseOptions, RequestMethod } fr
 import { MockBackend, MockConnection } from '@angular/http/testing';
 
 import {User, UserType} from '../user/user';
-import {Cart, ShopOrder} from "../balance/cart";
-import {Order} from "../balance/order";
+import {Cart, ShopOrder} from "../checkout/cart";
+import {Order} from "../checkout/order";
 
 var PRODUCTS: any[] = [
     {id:0, name: "ChairDest2", desc:"A desk with papers and a chair",

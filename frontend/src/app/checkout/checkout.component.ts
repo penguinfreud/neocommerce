@@ -9,11 +9,11 @@ import { AccountService } from './account.service';
 import {Order} from "./order";
 
 @Component({
-    selector: 'balance',
-    templateUrl: './balance.component.html',
-    styleUrls: ['./balance.component.css']
+    selector: 'checkout',
+    templateUrl: './checkout.component.html',
+    styleUrls: ['./checkout.component.css']
 })
-export class BalanceComponent implements OnInit {
+export class CheckoutComponent implements OnInit {
     cart: Cart;
     // products: Product[];
     total: number;

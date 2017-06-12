@@ -1,14 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
-import { Observable } from 'rxjs';
-import { Subject } from 'rxjs/Subject';
+import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
 import { Product } from '../product/product';
 import { Cart } from './cart';
 import {User} from '../user/user';
-import { ProductService } from '../product/product.service';
 import {UserService} from "../user/user.service";
 import {Order} from "./order";
 
