@@ -8,7 +8,7 @@ import {AccountService} from "../balance/account.service";
 import {UserService} from "../user/user.service";
 import {User} from "../user/user";
 
-import '../../assets/js/product-detail.js';
+import '../../assets/js/product-detail';
 
 @Component({
     selector: 'product-detail',

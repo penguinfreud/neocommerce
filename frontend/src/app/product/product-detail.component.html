@@ -6,6 +6,18 @@
 <!--</div>-->
 
 <div class="detail-container" *ngIf="product">
+    <div class="main-content" id="main-content">
+        <div class="model-title">
+            <span id="product-name">{{product.name}}</span>
+        </div>
+        <div class="container" id="canvas_container">
+            <!-- this img is used for detecting when the canvas_container has been loaded to the window -->
+            <img onload="threedshow()" src="model/ChairDesk/large_thumbnail.jpg" style="display: none;">
+        </div>
+        <div class="model-description">
+            {{product.desc}}
+        </div>
+    </div>
     <div id="metadata-panel" class="metadata-panel">
         <div class="metadata-top">
             <span>Parameter Adjustment</span>
@@ -99,18 +111,6 @@
                 <span class="btn-add-into-trolley" *ngIf="product" (click)="addToCart()">加入购物车</span>
                 <span class="btn-submit" *ngIf="product" (click)="balance()">立即购买</span>
             </div>
-        </div>
-    </div>
-    <div class="main-content" id="main-content">
-        <div class="model-title">
-            <span id="product-name">{{product.name}}</span>
-        </div>
-        <div class="container" id="canvas_container">
-            <!-- this img is used for detecting when the canvas_container has been loaded to the window -->
-            <img onload="threedshow()" src="model/ChairDesk/large_thumbnail.jpg" style="display: none;">
-        </div>
-        <div class="model-description">
-            {{product.desc}}
         </div>
     </div>
 </div>

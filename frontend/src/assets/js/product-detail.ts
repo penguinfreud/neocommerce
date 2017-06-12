@@ -6,15 +6,32 @@ interface Vector3 {
     normalize: () => Vector3
 }
 
+interface Color {}
+
+interface Material {}
+
+interface MultiMaterial {
+    materials: Material []
+}
+
+interface MaterialWithColor extends Material {
+    color: Color
+}
+
 interface Object3D {
     position: Vector3
     scale: Vector3
+    children: Object3D[]
 }
 
 interface Scene extends Object3D {
     children: Object3D[]
     add: (child: Object3D) => void
     remove: (child: Object3D) => void
+}
+
+interface Mesh extends Object3D {
+    material: MultiMaterial
 }
 
 interface Renderer {
@@ -25,6 +42,7 @@ interface Renderer {
 }
 
 declare var THREE: {
+    Color: new (r: number, g: number, b: number) => Color
     Scene: new () => Scene
     PerspectiveCamera: new (fov: number, aspect: number, far: number, near: number) => Object3D
     GridHelper: new (size: number, divisions: number) => Object3D
@@ -57,13 +75,13 @@ var MODEL_SCALE = [
     0.05, 0.06, 0.05,
 ];
 var MODELS = ["Drehstuhl", "ChairDesk", "ChairDest2"];
-var model: Scene;
-var COLORS = {
+var model: Object3D;
+/*var COLORS = {
     "red": [1, 0, 0],
     "yellow": [1, 1, 0],
     "blue": [0, 0, 1],
     "black": [0.1, 0.1, 0.1]
-};
+};*/
 var COLORS = {
     "red": new THREE.Color(1, 0, 0),
     "yellow": new THREE.Color(1, 1, 0),
@@ -81,7 +99,8 @@ function init() {
 }
 
 function onUnload() {
-    console.log("unload callled");
+    console.log("unload called");
+    stopAnimation();
     while (scene.children.length > 0) {
         scene.remove(scene.children[0]);
     }
@@ -140,7 +159,7 @@ function threedshow() {
     // stats = new Stats();
     // container.appendChild( stats.dom );
 
-    animate();
+    startAnimation();
     // switchDeskColor("red");
     // switchChairColor("red");
 }
@@ -152,19 +171,19 @@ function switchDeskColor(color: string) {
     let selection = MODELS.indexOf(product_name);
     if (selection == 1) {
         let lastchild = model.children[0];
-        let material = lastchild.children[0].material;
+        let material = (lastchild.children[0] as Mesh).material;
         let array = COLORS[color];
-        material.materials[0].color = COLORS[color];
+        (material.materials[0] as MaterialWithColor).color = COLORS[color];
     }
     if (selection == 2) {
         // legs
-        let node = model.children[57];
+        let node = model.children[57] as Mesh;
         let materials = node.material.materials;
-        materials[0].color = COLORS[color];
+        (materials[0] as MaterialWithColor).color = COLORS[color];
         // desk surface
-        node = model.children[35];
+        node = model.children[35] as Mesh;
         materials = node.material.materials;
-        materials[0].color = COLORS[color];
+        (materials[0] as MaterialWithColor).color = COLORS[color];
     }
 }
 
@@ -175,29 +194,46 @@ function switchChairColor(color: string) {
     let selection = MODELS.indexOf(product_name);
     let array = COLORS[color];
     switch (selection) {
-        case 0:
-            let material = model.children[1].children[1].children[0].material;
-            material.materials[0].color = COLORS[color];
+        case 0: {
+            let material = (model.children[1].children[1].children[0] as Mesh).material;
+            (material.materials[0] as MaterialWithColor).color = COLORS[color];
             break;
-        case 1:
+        }
+        case 1: {
             let lastchild = model.children[19];
-            let material = lastchild.children[0].material;
-            material.materials[0].color = COLORS[color];
+            let material = (lastchild.children[0] as Mesh).material;
+            (material.materials[0] as MaterialWithColor).color = COLORS[color];
             break;
-        case 2:
+        }
+        case 2: {
             let node = model.children[60].children[0].children[0].children[0];
-            let materials = node.children[0].material.materials;
-            materials[0].color = COLORS[color];
+            let materials = (node.children[0] as Mesh).material.materials;
+            (materials[0] as MaterialWithColor).color = COLORS[color];
             break;
+        }
     }
 }
 
-function animate() {
-    requestAnimationFrame( animate );
-    render();
-    // stats.update();
+var shouldAnimate = false;
+var animationRunning = false;
+
+function startAnimation() {
+    shouldAnimate = true;
+    if (!animationRunning) {
+        animate();
+    }
 }
-function render() {
-    requestAnimationFrame(render);
-    renderer.render(scene, camera);
+
+function stopAnimation() {
+    shouldAnimate = false;
+}
+
+function animate() {
+    if (shouldAnimate) {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+        // stats.update();
+    } else {
+        animationRunning = false;
+    }
 }

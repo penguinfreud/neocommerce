@@ -1,23 +1,21 @@
 div.detail-container {
-    width: 960px;
     min-height: 500px;
 }
 div.main-content {
     width: 654px;
     margin-right: 50px;
-    float: left;
     box-sizing: border-box;
     padding-bottom: 20px;
+    display: inline-block;
+    vertical-align: top;
 }
 div.main-content #canvas_container {
     height: 369px;
 }
 div.metadata-panel {
-    position: relative;
     width: 280px;
     /*margin-right: 5%;*/
-    margin-left: -264px;
-    float: right;
+    display: inline-block;
 }
 .model-title, .metadata-top {
     margin-bottom: 10px;

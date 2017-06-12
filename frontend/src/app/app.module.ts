@@ -48,8 +48,8 @@ import {MockBackend, MockConnection} from '@angular/http/testing';
         AccountService,
 
         BaseRequestOptions,
-        //fakeBackendProvider,
-        //MockBackend
+        fakeBackendProvider,
+        MockBackend
      ]
 })
 export class AppModule { }

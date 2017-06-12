@@ -11,10 +11,10 @@
     <div class="search-left">
         <span>Search</span>
         <i></i>
-    </div>
-    <input type="text" #searchBox placeholder="search hit products" id="searchid">
-    <div class="search-btn" (click)="search(searchBox.value)">
-        <i></i>
+        <input type="text" #searchBox placeholder="search hit products" id="searchid">
+        <div class="search-btn" (click)="search(searchBox.value)">
+            <i></i>
+        </div>
     </div>
 </div>
 <div class="detail-container" *ngIf="products">
