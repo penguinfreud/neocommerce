@@ -19,6 +19,8 @@ hs_err_pid*
 *.js.map
 node_modules/
 /frontend/src/**/*.js
-!/frontend/src/systemjs{.config,.config.extra,-angular-loader}.js
+!/frontend/src/systemjs.config.js
+!/frontend/src/systemjs.config.extra.js
+!/frontend/src/systemjs-angular-loader.js
 /frontend/aot/
 /src/main/resources/static/build.js

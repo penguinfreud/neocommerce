@@ -6,6 +6,8 @@ import 'rxjs/add/operator/map'
 
 import { User } from './user';
 
+let reqOpt = new RequestOptions({ headers: new Headers({ 'Content-Type': 'application/json', 'Accept': 'application/json' }) });
+
 @Injectable()
 export class UserService {
     private currentUser: Subject<User> = new Subject<User>();
@@ -20,11 +22,11 @@ export class UserService {
     }
 
     create(user: User) {
-        return this.http.post('/api/users', user, this.jwt()).map((response: Response) => response.json());
+        return this.http.post('/api/users', user, this.jwt(true)).map((response: Response) => response.json());
     }
 
     update(user: User) {
-        return this.http.put('/api/users/' + user.id, user, this.jwt()).map((response: Response) => response.json());
+        return this.http.put('/api/users/' + user.id, user, this.jwt(true)).map((response: Response) => response.json());
     }
 
     delete(id: number) {
@@ -36,7 +38,7 @@ export class UserService {
     }
 
     login(username: string, password: string) {
-        return this.http.post('/api/login', JSON.stringify({ username: username, password: password }))
+        return this.http.post('/api/login', JSON.stringify({ userName: username, password: password }), reqOpt)
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
                 let user = response.json();
@@ -58,11 +60,14 @@ export class UserService {
 
     // private helper methods
 
-    private jwt() {
+    private jwt(hasContent?: boolean) {
         // create authorization header with jwt token
         let currentUser = JSON.parse(localStorage.getItem('currentUser'));
         if (currentUser && currentUser.token) {
-            let headers = new Headers({ 'Authorization': 'Bearer ' + currentUser.token });
+            let headers = new Headers({ 'Accept': 'application/json', 'Authorization': 'Bearer ' + currentUser.token });
+            if (hasContent) {
+                headers.append('Content-Type', 'application/json');
+            }
             return new RequestOptions({ headers: headers });
         }
     }

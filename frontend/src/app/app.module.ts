@@ -1,6 +1,7 @@
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { BaseRequestOptions, HttpModule } from '@angular/http';
 
 import { AppComponent }  from './app.component';
 import { NavBarComponent } from './nav-bar.component'
@@ -21,12 +22,11 @@ import { UserService } from './user/user.service';
 import { ProductService } from './product/product.service';
 import { AccountService } from './balance/account.service';
 
-import { fakeBackendProvider } from './util/fake-backend';
-import { MockBackend, MockConnection } from '@angular/http/testing';
-import { BaseRequestOptions } from '@angular/http';
+import {fakeBackendProvider} from './util/fake-backend';
+import {MockBackend, MockConnection} from '@angular/http/testing';
 
 @NgModule({
-    imports:      [ BrowserModule, AppRoutingModule, FormsModule ],
+    imports:      [ BrowserModule, AppRoutingModule, FormsModule, HttpModule ],
     declarations: [
         AppComponent,
         NavBarComponent,
@@ -46,9 +46,10 @@ import { BaseRequestOptions } from '@angular/http';
         UserService,
         ProductService,
         AccountService,
-        
-        fakeBackendProvider,
-        MockBackend, BaseRequestOptions
+
+        BaseRequestOptions,
+        //fakeBackendProvider,
+        //MockBackend
      ]
 })
 export class AppModule { }

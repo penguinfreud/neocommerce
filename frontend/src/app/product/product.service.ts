@@ -20,11 +20,11 @@ export class ProductService {
     }
 
     create(product: Product) {
-        return this.http.post('/api/products', product, this.jwt()).map((response: Response) => response.json());
+        return this.http.post('/api/products', product, this.jwt(true)).map((response: Response) => response.json());
     }
 
     update(product: Product) {
-        return this.http.put('/api/products/' + product.id, product, this.jwt()).map((response: Response) => response.json());
+        return this.http.put('/api/products/' + product.id, product, this.jwt(true)).map((response: Response) => response.json());
     }
 
     delete(id: number) {
@@ -36,11 +36,14 @@ export class ProductService {
     //     return this.http.get('/api/')
     // }
 
-    private jwt() {
+    private jwt(hasContent?: boolean) {
         // create authorization header with jwt token
         let currentUser = JSON.parse(localStorage.getItem('currentUser'));
         if (currentUser && currentUser.token) {
-            let headers = new Headers({ 'Authorization': 'Bearer ' + currentUser.token });
+            let headers = new Headers({ 'Accept': 'application/json', 'Authorization': 'Bearer ' + currentUser.token });
+            if (hasContent) {
+                headers.append('Content-Type', 'application/json');
+            }
             return new RequestOptions({ headers: headers });
         }
     }

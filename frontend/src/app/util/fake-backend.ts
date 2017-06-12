@@ -41,7 +41,7 @@ export function useFactory(backend: MockBackend, options: BaseRequestOptions) {
 
                 // find if any user matches login credentials
                 let filteredUsers = users.filter(user => {
-                    return user.username === params.username && user.password === params.password;
+                    return user.userName === params.userName && user.password === params.password;
                 });
 
                 if (filteredUsers.length) {
@@ -51,7 +51,7 @@ export function useFactory(backend: MockBackend, options: BaseRequestOptions) {
                         status: 200,
                         body: {
                             id: user.id,
-                            username: user.username,
+                            username: user.userName,
                             name: user.name,
                             token: 'fake-jwt-token',
                             type: user.type,
@@ -98,9 +98,9 @@ export function useFactory(backend: MockBackend, options: BaseRequestOptions) {
                 let newUser = JSON.parse(connection.request.getBody());
 
                 // validation
-                let duplicateUser = users.filter(user => { return user.username === newUser.username; }).length;
+                let duplicateUser = users.filter(user => { return user.userName === newUser.userName; }).length;
                 if (duplicateUser) {
-                    return connection.mockError(new Error('Username "' + newUser.username + '" is already taken'));
+                    return connection.mockError(new Error('Username "' + newUser.userName + '" is already taken'));
                 }
 
                 // save new user

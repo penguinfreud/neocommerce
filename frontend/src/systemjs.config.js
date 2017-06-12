@@ -42,7 +42,10 @@
       app: ngPkg,
       rxjs: {
         defaultExtension: 'js'
-      }
+      },
+        assets: {
+        defaultExtension: 'js'
+        }
     }
   });
 })(this);
