@@ -8,7 +8,7 @@ import {AccountService} from "../balance/account.service";
 import {UserService} from "../user/user.service";
 import {User} from "../user/user";
 
-import '../../assets/js/product-detail';
+import '../../assets/js/product-detail.js';
 
 @Component({
     selector: 'product-detail',
@@ -43,11 +43,13 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     }
 
     onDeskChange(color: any) {
-        console.log(color);
+        // console.log(color);
+        switchDeskColor(color);
     }
 
     onChairChange(color: any) {
-        console.log(color);
+        // console.log(color);
+        switchChairColor(color);
     }
 
     addToCart():void {
