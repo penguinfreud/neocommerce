@@ -7,5 +7,4 @@ export class Order {
     id: number;
     user_id: number;
     product: Product;
-    selected: boolean;
 }

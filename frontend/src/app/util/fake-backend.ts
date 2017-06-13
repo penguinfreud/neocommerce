@@ -2,7 +2,7 @@ import { Http, BaseRequestOptions, Response, ResponseOptions, RequestMethod } fr
 import { MockBackend, MockConnection } from '@angular/http/testing';
 
 import {User, UserType} from '../user/user';
-import {Cart, ShopOrder} from "../checkout/cart";
+import {Cart} from "../checkout/cart";
 import {Order} from "../checkout/order";
 
 var PRODUCTS: any[] = [
@@ -172,32 +172,21 @@ export function useFactory(backend: MockBackend, options: BaseRequestOptions) {
                 if (id <= users.length && token === 'fake-jwt-token') {
                     let user = users[id-1];
                     let newOrder = {id: order_id, user_id: id, product: product, selected: true};
-                    let filteredCart = carts.filter(cart => {
-                        return cart.id === user.id;
-                    });
+                    let filteredCart = carts.filter(cart => cart.id === user.id);
                     let selectedCart;
                     if (filteredCart.length) {
                         let cart = filteredCart[0].cart;
-                        let filteredShopOrders = cart.shopOrders.filter( shop => {
-                            return shop.shop === product.provider;
-                        });
-                        if (filteredShopOrders.length) {
-                            let shopOrder = filteredShopOrders[0];
-                            shopOrder.orders.push(newOrder);
-                        } else {
-                            cart.shopOrders.push({shop: product.provider, orders:[newOrder]});
-                        }
+                        cart.orders.push(newOrder);
                         selectedCart = cart;
                     } else {
-                        let shop: ShopOrder = {shop: product.provider, orders: [newOrder]};
-                        let cart:Cart = {shopOrders: [shop]};
+                        let cart:Cart = {orders: [newOrder]};
                         carts.push({id: id, cart: cart});
-                        selectedCart = carts[0].cart;
+                        selectedCart = cart;
                     }
                     order_id += 1;
                     localStorage.setItem("user_carts", JSON.stringify(carts));
                     localStorage.setItem('order_id', JSON.stringify(order_id));
-                    connection.mockRespond(new Response(new ResponseOptions({status: 200, body: JSON.stringify(selectedCart)})));
+                    connection.mockRespond(new Response(new ResponseOptions({status: 200, body: selectedCart})));
                 } else {
                     connection.mockError(new Error("No such user. Please log in first."));
                 }
@@ -217,9 +206,9 @@ export function useFactory(backend: MockBackend, options: BaseRequestOptions) {
                         return cart.id === user.id;
                     });
                     if (filteredCart.length)
-                        connection.mockRespond(new Response(new ResponseOptions({status: 200, body: JSON.stringify(filteredCart[0].cart)})));
+                        connection.mockRespond(new Response(new ResponseOptions({status: 200, body: filteredCart[0].cart})));
                     else
-                        connection.mockRespond(new Response(new ResponseOptions({status: 200, body: {shopOrders: []}})));
+                        connection.mockRespond(new Response(new ResponseOptions({status: 200, body: {orders: []}})));
                 } else {
                     connection.mockError(new Error("user not exist"));
                 }

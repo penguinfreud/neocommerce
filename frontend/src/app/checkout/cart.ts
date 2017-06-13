@@ -3,11 +3,6 @@
  */
 import { Order } from './order';
 
-export class ShopOrder {
-    shop: string;
-    orders: Order[];
-}
-
 export class Cart {
-    shopOrders: ShopOrder[];
+    orders: Order[];
 }

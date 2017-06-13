@@ -13,7 +13,6 @@ export class UserService {
     private currentUser: ReplaySubject<User> = new ReplaySubject<User>(1);
     constructor(private http: Http) {
         let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-        console.log(currentUser);
         if (currentUser && currentUser.token) {
             this.currentUser.next(currentUser);
         }

@@ -9,24 +9,24 @@
             <div class="th th-op">Operation</div>
         </div>
         <div class="container2">
-            <div class="order-list" *ngIf="cart.shopOrders">
+            <div class="order-list" *ngIf="cart.orders && shops">
                 <!--list of different shops-->
-                <div class="order-of-shop" *ngFor="let shop of cart.shopOrders">
+                <div class="order-of-shop" *ngFor="let shop of shops">
                     <!--shop infomation-->
                     <div class="shop">
                         <div class="shop-info">
                             <div class="cart-checkbox">
-                                <input class="shopcheckbox" name="orders[]" value="" type="checkbox" [checked]="shopSelected(shop)">
+                                <input #checkbox class="shopcheckbox" name="orders[]" value="" type="checkbox" [checked]="isShopSelected(shop)" (change)="setShopSelected(shop, checkbox.checked)">
                                 <label></label>
                             </div>
-                            &nbsp;&nbsp;店铺：<span class="shop-name">{{shop.shop}}</span>
+                            &nbsp;&nbsp;店铺：<span class="shop-name">{{shop}}</span>
                         </div>
                     </div>
                     <!--each product of this shop, presented by ul-->
                     <div class="order-content">
-                        <ul class="item-content" *ngFor="let order of shop.orders">
+                        <ul class="item-content" *ngFor="let order of getOrdersOfShop(shop)">
                             <li class="td cart-checkbox p-checkbox">
-                                <input type="checkbox" [checked]="order.selected" name="checkItem" >
+                                <input #checkbox type="checkbox" [checked]="isOrderSelected(order)" (change)="setOrderSelected(order, checkbox.checked)" name="checkItem" >
                                 <label for>勾选商品</label>
                             </li>
                             <li class="td name">
@@ -37,7 +37,7 @@
                             <li class="td price">{{order.product.price}}</li>
                             <li class="td amount" #this_amount>1</li>
                             <li class="td sum">{{order.product.price * 1}}</li>
-                            <li class="td rm"><span class="remove-btn" (click)="delete(order)">X</span></li>
+                            <li class="td rm"><span class="remove-btn" (click)="deleteOrder(order)">X</span></li>
                         </ul>
 
                     </div>
@@ -50,7 +50,7 @@
     <div class="checkout-bar">
         <div class="fl operations">
             <div class="cart-checkbox">
-                <input type="checkbox" (select)="selectAll()">
+                <input #selectAllCheckbox type="checkbox" (change)="selectAll(selectAllCheckbox.checked)">
                 <label for>勾选全部商品</label>
             </div>
             <span class="select-all">全选</span>
