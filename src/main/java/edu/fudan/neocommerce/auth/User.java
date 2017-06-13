@@ -1,5 +1,7 @@
 package edu.fudan.neocommerce.auth;
 
+import edu.fudan.neocommerce.order.Cart;
+
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -10,6 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class User {
     private UserInfo userInfo;
     private byte[] password;
+    private Cart cart = new Cart();
     private List<UUID> uuids = new CopyOnWriteArrayList<>();
 
     public User(UserInfo userInfo, byte[] password) {
@@ -35,5 +38,9 @@ public class User {
 
     public void removeAllTokens(TokenService tokenService) {
         uuids.forEach(tokenService::remove);
+    }
+
+    public Cart getCart() {
+        return cart;
     }
 }

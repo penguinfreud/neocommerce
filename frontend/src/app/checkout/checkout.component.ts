@@ -19,14 +19,11 @@ export class CheckoutComponent implements OnInit {
     selectedOrders: Order[];
     selectedShops: string[];
     total: number;
-    update: boolean = false;
 
     constructor(
         // private router: Router,
         private accountService: AccountService
-    ) {
-        console.log(this);
-    }
+    ) {}
 
     private arrayRemove<T>(a: T[], e: T) {
         for (let i = a.length - 1; i>=0; i--) {
@@ -41,6 +38,14 @@ export class CheckoutComponent implements OnInit {
             a.push(e);
     }
 
+    private unique<T>(a: T[]): T[] {
+        let result: T[] = [];
+        for (let e of a) {
+            this.addIfAbsent(result, e);
+        }
+        return result;
+    }
+
     ngOnInit() {
         this.cart = {orders: []};
 
@@ -50,7 +55,7 @@ export class CheckoutComponent implements OnInit {
     private refreshCart(setSelectedOrders: boolean = false) {
         this.accountService.getCart().then(res => {
             this.cart = res;
-            this.shops = res.orders.map((order) => order.product.provider);
+            this.shops = this.unique(res.orders.map((order) => order.product.provider));
             if (setSelectedOrders) {
                 this.selectedOrders = res.orders.slice();
                 this.selectedShops = this.shops.slice();
@@ -58,7 +63,6 @@ export class CheckoutComponent implements OnInit {
                 this.selectedOrders = this.selectedOrders.filter((o) => res.orders.indexOf(o) >= 0);
                 this.selectedShops = this.selectedOrders.map((o) => o.product.provider);
             }
-            console.log(res);
             this.refreshTotal();
         });
     }

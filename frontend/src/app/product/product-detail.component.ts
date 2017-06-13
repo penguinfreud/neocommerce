@@ -56,8 +56,9 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         let currentUser = this.validateLogIn();
         if (!currentUser) {
             this.router.navigate(['login']);
+        } else {
+            let cart = this.accountService.addProduct(this.product, currentUser);
         }
-        let cart = this.accountService.addProduct(this.product, currentUser);
     }
 
     checkout():void {

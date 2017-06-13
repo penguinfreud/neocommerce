@@ -22,7 +22,7 @@ export class AccountService {
     * */
     // post api/cart
     addProduct(product: Product, currentUser: User): Promise<Cart>{
-        return this.http.post(this.cartUrl, {product: product, id: currentUser.id, token: currentUser.token}, this.jwt())
+        return this.http.post(this.cartUrl, {productId: product.id, userId: currentUser.id}, this.jwt())
             .toPromise()
             .then(res => res.json().data as Cart)
             .catch(this.handleError);

@@ -4,6 +4,7 @@ import edu.fudan.neocommerce.auth.AuthService;
 import edu.fudan.neocommerce.auth.Token;
 import edu.fudan.neocommerce.exception.UnauthorizedException;
 import edu.fudan.neocommerce.product.Product;
+import edu.fudan.neocommerce.product.ProductsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,36 +17,48 @@ import java.util.UUID;
 public class OrderController {
 
     @Autowired
-    OrderService orderService;
+    private OrderService orderService;
 
     @Autowired
-    AuthService authService;
+    private AuthService authService;
+
+    @Autowired
+    private ProductsService productsService;
 
     @RequestMapping(value = "/{id}",method = RequestMethod.GET)
     @ResponseBody
-    public Cart getCart(@PathVariable("id") int userId, @RequestHeader("Authority")String auth) {
-        checkUser(auth, userId);
-        return orderService.getCart(userId);
+    public Cart getCart(@PathVariable("id") int userId, @RequestHeader("Authorization") String auth) {
+        Token token = authService.getToken(auth);
+        if (token == null || token.getUser().getUserInfo().getId() != userId)
+            throw new UnauthorizedException();
+        return token.getUser().getCart();
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public void addProduct(@RequestHeader("Authority") String auth, @RequestBody()Product product) {
-        int userId = getUserId(auth);
-        this.orderService.addOrder(userId, product);
-    }
-
-    private void checkUser(String auth, int userId) {
-        Token token = authService.getToken(auth);
-        if (token == null || token.getUser().getUserInfo().getId() != userId)
-            throw new UnauthorizedException();
-    }
-
-    private int getUserId(String auth) {
+    public String addProduct(@RequestHeader("Authorization") String auth, @RequestBody OrderInfo orderInfo) {
         Token token = authService.getToken(auth);
         if (token == null) {
             throw new UnauthorizedException() ;
         }
-        return token.getUser().getUserInfo().getId();
+        this.orderService.addOrder(token.getUser(), orderInfo.toOrder(productsService));
+        return "null";
+    }
+}
+
+class OrderInfo {
+    private int userId;
+    private int productId;
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public Order toOrder(ProductsService productsService) {
+        return new Order(0, userId, productsService.get(productId));
     }
 }

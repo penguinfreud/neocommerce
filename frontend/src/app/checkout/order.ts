@@ -5,6 +5,6 @@ import { Product } from '../product/product';
 import { User } from '../user/user';
 export class Order {
     id: number;
-    user_id: number;
+    userId: number;
     product: Product;
 }

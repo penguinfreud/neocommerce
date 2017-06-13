@@ -166,12 +166,11 @@ export function useFactory(backend: MockBackend, options: BaseRequestOptions) {
                 // add a product to user's cart
                 console.log("In fake backend add product");
                 let params =  JSON.parse(connection.request.getBody());
-                let id = params.id;
+                let id = params.userId;
                 let product = params.product;
-                let token = params.token;
-                if (id <= users.length && token === 'fake-jwt-token') {
+                if (id <= users.length && connection.request.headers.get('Authorization') === 'Bearer fake-jwt-token') {
                     let user = users[id-1];
-                    let newOrder = {id: order_id, user_id: id, product: product, selected: true};
+                    let newOrder = {id: order_id, userId: id, product: product, selected: true};
                     let filteredCart = carts.filter(cart => cart.id === user.id);
                     let selectedCart;
                     if (filteredCart.length) {
@@ -197,9 +196,7 @@ export function useFactory(backend: MockBackend, options: BaseRequestOptions) {
             if ( n && connection.request.method == RequestMethod.Get) {
                 console.log("In fake backend get cart");
                 let id = parseInt(n[1]);
-                let filteredUsers = users.filter(user => {
-                    return user.id === id;
-                });
+                let filteredUsers = users.filter(user => user.id === id);
                 if (filteredUsers.length) {
                     let user = filteredUsers[0];
                     let filteredCart = carts.filter(cart => {

@@ -23,7 +23,7 @@ import { ProductService } from './product/product.service';
 import { AccountService } from './checkout/account.service';
 
 import {fakeBackendProvider} from './util/fake-backend';
-import {MockBackend, MockConnection} from '@angular/http/testing';
+import {MockBackend} from '@angular/http/testing';
 
 @NgModule({
     imports:      [ BrowserModule, AppRoutingModule, FormsModule, HttpModule ],

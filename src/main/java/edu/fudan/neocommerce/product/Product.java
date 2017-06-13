@@ -12,6 +12,8 @@ public class Product {
     private String provider;
     private String factory;
 
+    public Product() {}
+
     public Product(String name, String desc, int price, int buyers, String provider, String factory) {
         this.name = name;
         this.desc = desc;

@@ -42,7 +42,7 @@ public class ProductsController {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public int add(@RequestHeader("Authority") String auth, @RequestBody Product product) {
+    public int add(@RequestHeader("Authorization") String auth, @RequestBody Product product) {
         checkAdmin(auth);
         return productsService.add(product);
     }
