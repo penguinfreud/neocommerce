@@ -47,9 +47,9 @@ import {MockBackend} from '@angular/http/testing';
         ProductService,
         AccountService,
 
-        BaseRequestOptions,
-        fakeBackendProvider,
-        MockBackend
+        //BaseRequestOptions,
+        //fakeBackendProvider,
+        //MockBackend
      ]
 })
 export class AppModule { }

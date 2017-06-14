@@ -230,6 +230,7 @@ function stopAnimation() {
 
 function animate() {
     if (shouldAnimate) {
+        animationRunning = true;
         requestAnimationFrame(animate);
         renderer.render(scene, camera);
         // stats.update();
